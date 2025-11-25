@@ -5,13 +5,14 @@ module.exports = {
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
         background: {
-          DEFAULT: '#1a1f3a',
-          dark: '#1e2440',
-          card: '#252b4a',
+          DEFAULT: '#ffffff',
+          dark: '#f9fafb',
+          card: '#ffffff',
         },
         primary: {
           DEFAULT: '#10b981',
@@ -24,14 +25,12 @@ module.exports = {
           dark: '#7c3aed',
         },
         text: {
-          primary: '#ffffff',
-          secondary: '#f3f4f6',
-          muted: '#9ca3af',
+          primary: '#111827',
+          secondary: '#374151',
+          muted: '#6b7280',
         },
       },
     },
   },
   plugins: [],
 }
-
-

@@ -3,6 +3,20 @@
 @tailwind utilities;
 
 :root {
+  /* Light mode colors */
+  --background: #ffffff;
+  --background-dark: #f9fafb;
+  --background-card: #ffffff;
+  --primary: #10b981;
+  --primary-light: #22c55e;
+  --secondary: #8b5cf6;
+  --text-primary: #111827;
+  --text-secondary: #374151;
+  --text-muted: #6b7280;
+}
+
+.dark {
+  /* Dark mode colors */
   --background: #1a1f3a;
   --background-dark: #1e2440;
   --background-card: #252b4a;
@@ -26,6 +40,7 @@ body {
   overflow-x: hidden;
   background-color: var(--background);
   color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body {
@@ -59,4 +74,31 @@ a {
   background: var(--primary);
 }
 
+/* Utility classes for theme-aware colors using CSS variables */
+.bg-background {
+  background-color: var(--background);
+}
 
+.bg-background-dark {
+  background-color: var(--background-dark);
+}
+
+.bg-background-card {
+  background-color: var(--background-card);
+}
+
+.text-text-primary {
+  color: var(--text-primary);
+}
+
+.text-text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-text-muted {
+  color: var(--text-muted);
+}
+
+.border-secondary {
+  border-color: var(--secondary);
+}

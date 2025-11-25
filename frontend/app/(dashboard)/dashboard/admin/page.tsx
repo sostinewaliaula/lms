@@ -131,9 +131,12 @@ export default function AdminDashboard() {
   return (
     <div className="p-6 space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-primary mb-2">Admin Dashboard</h1>
-        <p className="text-text-muted">Welcome back, {user?.user?.first_name || 'Admin'}!</p>
-        <p className="text-sm text-text-muted mt-1">Caava Group Learning Management System</p>
+        <h1 className="text-4xl font-bold text-primary mb-3">Admin Dashboard</h1>
+        <p className="text-lg text-text-muted mb-1">Welcome back, {user?.user?.first_name || 'Admin'}!</p>
+        <p className="text-base text-text-muted">
+          <span className="text-primary font-semibold">Caava</span>{' '}
+          <span className="text-secondary font-semibold">Group</span> Learning Management System
+        </p>
       </div>
 
       {/* Stats Grid */}

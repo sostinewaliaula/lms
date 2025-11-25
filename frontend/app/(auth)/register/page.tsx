@@ -48,9 +48,23 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <div className="w-full max-w-md">
-        <div className="bg-background-card rounded-lg p-8 shadow-lg">
-          <h1 className="text-3xl font-bold text-primary mb-2">Create Account</h1>
-          <p className="text-text-muted mb-6">Sign up to get started</p>
+        <div className="bg-background-card dark:bg-background-card rounded-lg p-8 shadow-lg border border-secondary/30">
+          <div className="flex flex-col items-center mb-6">
+            <img 
+              src="/assets/logo.png" 
+              alt="Caava Group Logo" 
+              className="w-48 h-48 object-contain mb-3"
+            />
+            <div className="text-center mb-4">
+              <h1 className="text-5xl font-bold mb-2">
+                <span className="text-primary">Caava</span>{' '}
+                <span className="text-secondary">Group</span>
+              </h1>
+              <p className="text-xl text-text-muted">Learning Management System</p>
+            </div>
+            <h2 className="text-3xl font-semibold text-text-primary mb-1">Create Account</h2>
+            <p className="text-lg text-text-muted">Sign up to get started</p>
+          </div>
 
           {error && (
             <div className="bg-red-500/20 border border-red-500 text-red-400 px-4 py-3 rounded mb-4">

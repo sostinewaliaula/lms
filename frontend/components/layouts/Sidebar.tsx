@@ -17,6 +17,7 @@ import {
   Tag,
 } from 'lucide-react';
 import { authApi } from '@/lib/api/auth';
+import ThemeToggle from '@/components/ThemeToggle';
 
 const getMenuItems = (userRole?: string) => {
   const baseItems = [
@@ -86,9 +87,21 @@ export default function Sidebar() {
 
   return (
     <div className="h-full w-64 bg-background-card border-r border-secondary/30 flex flex-col">
-      <div className="p-6 border-b border-secondary/30">
-        <h1 className="text-xl font-bold text-primary">Caava Group</h1>
-        <p className="text-xs text-text-muted mt-1">Learning Management System</p>
+      <div className="px-4 border-b border-secondary/30">
+        <div className="flex flex-col items-center -my-2">
+          <img 
+            src="/assets/logo.png" 
+            alt="Caava Group Logo" 
+            className="w-40 h-40 object-contain -my-4"
+          />
+          <div className="text-center -mt-5">
+            <h1 className="text-3xl font-bold leading-tight">
+              <span className="text-primary">Caava</span>{' '}
+              <span className="text-secondary">Group</span>
+            </h1>
+          </div>
+          <p className="text-xs text-text-muted text-center -mt-5">Learning Management System</p>
+        </div>
       </div>
 
       <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
@@ -113,7 +126,11 @@ export default function Sidebar() {
         })}
       </nav>
 
-      <div className="p-4 border-t border-secondary/30">
+      <div className="p-4 border-t border-secondary/30 space-y-2">
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-text-muted">Theme</span>
+          <ThemeToggle />
+        </div>
         <button
           onClick={handleLogout}
           className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted hover:bg-secondary/10 hover:text-text-primary transition-colors"
