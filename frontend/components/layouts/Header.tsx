@@ -2,12 +2,37 @@
 
 import { User, Bell } from 'lucide-react';
 import ThemeToggle from '@/components/ThemeToggle';
+import { usePathname } from 'next/navigation';
 
 export default function Header({ userName, userRole, userAvatar }: { 
   userName?: string; 
   userRole?: string;
   userAvatar?: string;
 }) {
+  const pathname = usePathname();
+  
+  const getPageTitle = () => {
+    if (pathname?.includes('/admin')) {
+      if (pathname.includes('/users')) return 'Users';
+      if (pathname.includes('/departments')) return 'Departments';
+      if (pathname.includes('/categories')) return 'Categories';
+      if (pathname.includes('/courses')) return 'Courses';
+      if (pathname.includes('/analytics')) return 'Analytics';
+      if (pathname.includes('/settings')) return 'Settings';
+      return 'Admin Dashboard';
+    }
+    if (pathname?.includes('/instructor')) {
+      return 'Instructor Dashboard';
+    }
+    if (pathname?.includes('/student')) {
+      return 'Student Dashboard';
+    }
+    if (pathname?.includes('/courses')) {
+      return 'Courses';
+    }
+    return 'Dashboard';
+  };
+
   const getRoleDisplay = (role?: string) => {
     if (!role) return 'User';
     return role.charAt(0).toUpperCase() + role.slice(1);
@@ -15,19 +40,8 @@ export default function Header({ userName, userRole, userAvatar }: {
 
   return (
     <header className="h-16 bg-background-card border-b border-secondary/30 flex items-center justify-between px-6">
-      <div className="flex items-center gap-3">
-        <img 
-          src="/assets/logo.png" 
-          alt="Caava Group Logo" 
-          className="w-20 h-20 object-contain"
-        />
-        <div>
-          <h2 className="text-xl font-bold">
-            <span className="text-primary">Caava</span>{' '}
-            <span className="text-secondary">Group</span>
-          </h2>
-          <p className="text-xs text-text-muted">Dashboard</p>
-        </div>
+      <div>
+        <h2 className="text-xl font-semibold text-text-primary">{getPageTitle()}</h2>
       </div>
       
       <div className="flex items-center gap-4">

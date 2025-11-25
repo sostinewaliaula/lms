@@ -39,7 +39,7 @@ export default function AdminAnalyticsPage() {
     <div className="p-6 space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-primary mb-2">Analytics Dashboard</h1>
-        <p className="text-text-muted">Comprehensive insights into your LMS</p>
+        <p className="text-text-muted">Comprehensive insights into Caava Knowledge Center</p>
       </div>
 
       {/* Overview Stats */}

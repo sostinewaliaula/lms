@@ -135,7 +135,7 @@ export default function AdminDashboard() {
         <p className="text-lg text-text-muted mb-1">Welcome back, {user?.user?.first_name || 'Admin'}!</p>
         <p className="text-base text-text-muted">
           <span className="text-primary font-semibold">Caava</span>{' '}
-          <span className="text-secondary font-semibold">Group</span> Learning Management System
+          <span className="text-secondary font-semibold">Group</span> - Caava Knowledge Center
         </p>
       </div>
 

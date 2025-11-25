@@ -3,8 +3,8 @@ import './globals.css';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 
 export const metadata: Metadata = {
-  title: 'Caava Group - Learning Management System',
-  description: 'Caava Group Learning Management System',
+  title: 'Caava Group - Caava Knowledge Center',
+  description: 'Caava Knowledge Center',
   icons: {
     icon: [
       { url: '/assets/logo.png', type: 'image/png' },

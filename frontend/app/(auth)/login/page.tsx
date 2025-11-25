@@ -55,7 +55,7 @@ export default function LoginPage() {
                 <span className="text-primary">Caava</span>{' '}
                 <span className="text-secondary">Group</span>
               </h1>
-              <p className="text-xl text-text-muted">Learning Management System</p>
+              <p className="text-xl text-text-muted">Caava Knowledge Center</p>
             </div>
             <h2 className="text-3xl font-semibold text-text-primary mb-1">Welcome Back</h2>
             <p className="text-lg text-text-muted">Sign in to your account</p>

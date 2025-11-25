@@ -60,6 +60,7 @@ const getMenuItems = (userRole?: string) => {
 export default function Sidebar() {
   const pathname = usePathname();
   const [userRole, setUserRole] = useState<string | null>(null);
+  const [logoError, setLogoError] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -87,20 +88,28 @@ export default function Sidebar() {
 
   return (
     <div className="h-full w-64 bg-background-card border-r border-secondary/30 flex flex-col">
-      <div className="px-4 border-b border-secondary/30">
-        <div className="flex flex-col items-center -my-2">
-          <img 
-            src="/assets/logo.png" 
-            alt="Caava Group Logo" 
-            className="w-40 h-40 object-contain -my-4"
-          />
-          <div className="text-center -mt-5">
-            <h1 className="text-3xl font-bold leading-tight">
-              <span className="text-primary">Caava</span>{' '}
-              <span className="text-secondary">Group</span>
-            </h1>
+      <div className="px-4 border-b border-secondary/30 pb-3">
+        <div className="flex flex-col items-center">
+          <div className="w-40 h-40 -my-4 flex items-center justify-center">
+            {!logoError ? (
+              <img 
+                src="/assets/logo.png" 
+                alt="Caava Group" 
+                className="w-40 h-40 object-contain"
+                onError={() => setLogoError(true)}
+              />
+            ) : (
+              <div className="text-center">
+                <h1 className="text-3xl font-bold leading-tight">
+                  <span className="text-primary">Caava</span>{' '}
+                  <span className="text-secondary">Group</span>
+                </h1>
+              </div>
+            )}
           </div>
-          <p className="text-xs text-text-muted text-center -mt-5">Learning Management System</p>
+          <p className="text-sm font-semibold text-text-primary text-center whitespace-nowrap tracking-wider knowledge-center-text -mt-3 mb-1">
+            Caava Knowledge Center
+          </p>
         </div>
       </div>
 

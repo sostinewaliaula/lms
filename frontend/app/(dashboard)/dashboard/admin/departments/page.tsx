@@ -190,7 +190,7 @@ export default function AdminDepartmentsPage() {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   className="w-full px-4 py-2 bg-background border border-secondary/30 rounded-lg text-text-primary focus:outline-none focus:border-primary"
-                  placeholder="e.g., IT, Engineering, LMS"
+                  placeholder="e.g., IT, Engineering, Knowledge Center"
                 />
               </div>
               <div>
