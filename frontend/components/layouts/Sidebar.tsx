@@ -45,6 +45,7 @@ const getMenuItems = (userRole?: string) => {
   if (userRole === 'admin') {
     return [
       ...baseItems,
+      { name: 'Manage Courses', href: '/dashboard/admin/courses', icon: BookOpen },
       { name: 'Users', href: '/dashboard/admin/users', icon: Users },
       { name: 'Departments', href: '/dashboard/admin/departments', icon: Building2 },
       { name: 'Categories', href: '/dashboard/admin/categories', icon: Tag },

@@ -58,8 +58,8 @@ export class CourseModel {
         data.category_id || null,
         data.department_id || null,
         data.thumbnail_url || null,
-        data.price || 0,
-        data.is_free ?? true,
+        0,
+        true,
         data.visibility || 'public',
         data.difficulty_level || null,
         data.language || 'en',
@@ -147,11 +147,15 @@ export class CourseModel {
     const values: any[] = [];
 
     Object.entries(updates).forEach(([key, value]) => {
-      if (value !== undefined && key !== 'id' && key !== 'created_at' && key !== 'slug') {
+      if (value !== undefined && key !== 'id' && key !== 'created_at' && key !== 'slug' && key !== 'price' && key !== 'is_free') {
         fields.push(`${key} = ?`);
         values.push(value);
       }
     });
+
+    // Always set price to 0 and is_free to true for company LMS
+    fields.push('price = ?', 'is_free = ?');
+    values.push(0, true);
 
     if (fields.length === 0) return null;
 
