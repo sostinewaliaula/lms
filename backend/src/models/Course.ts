@@ -9,6 +9,7 @@ export interface Course {
   short_description: string;
   instructor_id: string;
   category_id?: string;
+  department_id?: string;
   thumbnail_url?: string;
   price: number;
   is_free: boolean;
@@ -30,6 +31,7 @@ export interface CreateCourseData {
   short_description?: string;
   instructor_id: string;
   category_id?: string;
+  department_id?: string;
   thumbnail_url?: string;
   price?: number;
   is_free?: boolean;
@@ -44,9 +46,9 @@ export class CourseModel {
     
     await pool.query(
       `INSERT INTO courses (
-        title, slug, description, short_description, instructor_id, category_id,
+        title, slug, description, short_description, instructor_id, category_id, department_id,
         thumbnail_url, price, is_free, visibility, difficulty_level, language
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         data.title,
         slug,
@@ -54,6 +56,7 @@ export class CourseModel {
         data.short_description || '',
         data.instructor_id,
         data.category_id || null,
+        data.department_id || null,
         data.thumbnail_url || null,
         data.price || 0,
         data.is_free ?? true,
@@ -91,6 +94,11 @@ export class CourseModel {
     if (filters.category_id) {
       query += ' AND category_id = ?';
       params.push(filters.category_id);
+    }
+
+    if (filters.department_id) {
+      query += ' AND department_id = ?';
+      params.push(filters.department_id);
     }
 
     if (filters.instructor_id) {

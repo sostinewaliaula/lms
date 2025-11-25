@@ -39,6 +39,8 @@ import forumRoutes from './routes/forums';
 import messageRoutes from './routes/messages';
 import videoRoutes from './routes/video';
 import analyticsRoutes from './routes/analytics';
+import departmentRoutes from './routes/departments';
+import userRoutes from './routes/users';
 
 // Health check
 app.get('/health', (req, res) => {
@@ -56,6 +58,8 @@ app.use('/api/forums', forumRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/video', videoRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/departments', departmentRoutes);
+app.use('/api/users', userRoutes);
 
 // Socket.io connection handling
 io.on('connection', (socket) => {

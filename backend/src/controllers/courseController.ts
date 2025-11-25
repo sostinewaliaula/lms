@@ -32,6 +32,7 @@ export const getCourses = async (req: Request, res: Response): Promise<void> => 
   try {
     const {
       category_id,
+      department_id,
       instructor_id,
       is_published,
       visibility,
@@ -46,6 +47,7 @@ export const getCourses = async (req: Request, res: Response): Promise<void> => 
     };
 
     if (category_id) filters.category_id = category_id as string;
+    if (department_id) filters.department_id = department_id as string;
     if (instructor_id) filters.instructor_id = instructor_id as string;
     if (is_published !== undefined) filters.is_published = is_published === 'true';
     if (visibility) filters.visibility = visibility as string;
@@ -66,6 +68,14 @@ export const getCourses = async (req: Request, res: Response): Promise<void> => 
       if (course.category_id) {
         const category = await CategoryModel.findById(course.category_id);
         (course as any).category = category;
+      }
+
+      if (course.department_id) {
+        const [deptResult] = await pool.query(
+          'SELECT id, name, slug FROM departments WHERE id = ?',
+          [course.department_id]
+        );
+        (course as any).department = (deptResult as any[])[0];
       }
     }
 
@@ -97,6 +107,15 @@ export const getCourse = async (req: Request, res: Response): Promise<void> => {
     if (course.category_id) {
       const category = await CategoryModel.findById(course.category_id);
       (course as any).category = category;
+    }
+
+    // Get department
+    if (course.department_id) {
+      const [deptResult] = await pool.query(
+        'SELECT id, name, slug FROM departments WHERE id = ?',
+        [course.department_id]
+      );
+      (course as any).department = (deptResult as any[])[0];
     }
 
     // Get tags

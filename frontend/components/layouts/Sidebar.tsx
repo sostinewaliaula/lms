@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
@@ -12,7 +13,10 @@ import {
   LogOut,
   Users,
   FileText,
+  Building2,
+  Tag,
 } from 'lucide-react';
+import { authApi } from '@/lib/api/auth';
 
 const getMenuItems = (userRole?: string) => {
   const baseItems = [
@@ -40,63 +44,84 @@ const getMenuItems = (userRole?: string) => {
   if (userRole === 'admin') {
     return [
       ...baseItems,
-      { name: 'Users', href: '/dashboard/users', icon: Users },
-      { name: 'Analytics', href: '/dashboard/analytics', icon: BarChart3 },
+      { name: 'Users', href: '/dashboard/admin/users', icon: Users },
+      { name: 'Departments', href: '/dashboard/admin/departments', icon: Building2 },
+      { name: 'Categories', href: '/dashboard/admin/categories', icon: Tag },
+      { name: 'Analytics', href: '/dashboard/admin/analytics', icon: BarChart3 },
       { name: 'Forums', href: '/dashboard/forums', icon: MessageSquare },
+      { name: 'Settings', href: '/dashboard/admin/settings', icon: Settings },
     ];
   }
 
   return baseItems;
 };
 
-export default function Sidebar({ userRole }: { userRole?: string }) {
+export default function Sidebar() {
   const pathname = usePathname();
+  const [userRole, setUserRole] = useState<string | null>(null);
 
-  const filteredItems = getMenuItems(userRole);
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const profile = await authApi.getProfile();
+        setUserRole(profile.user?.role || null);
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+      }
+    };
+    fetchUser();
+  }, []);
+
+  const menuItems = getMenuItems(userRole || undefined);
+
+  const handleLogout = async () => {
+    try {
+      await authApi.logout();
+      window.location.href = '/login';
+    } catch (error) {
+      console.error('Logout error:', error);
+      window.location.href = '/login';
+    }
+  };
 
   return (
-    <div className="w-64 bg-background-dark min-h-screen p-4">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-primary">LMS</h1>
+    <div className="h-full w-64 bg-background-card border-r border-secondary/30 flex flex-col">
+      <div className="p-6 border-b border-secondary/30">
+        <h1 className="text-xl font-bold text-primary">Caava Group</h1>
+        <p className="text-xs text-text-muted mt-1">Learning Management System</p>
       </div>
 
-      <nav className="space-y-2">
-        {filteredItems.map((item) => {
+      <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+        {menuItems.map((item) => {
           const Icon = item.icon;
-          // Check if current path matches or starts with the href
-          const isActive = pathname === item.href || 
-            (item.href.includes('/dashboard/') && pathname.startsWith(item.href));
+          const isActive = pathname === item.href || pathname?.startsWith(item.href + '/');
+          
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                 isActive
-                  ? 'bg-secondary text-white'
-                  : 'text-text-secondary hover:bg-background-card hover:text-text-primary'
+                  ? 'bg-primary/10 text-primary border-l-4 border-primary'
+                  : 'text-text-muted hover:bg-secondary/10 hover:text-text-primary'
               }`}
             >
               <Icon size={20} />
-              <span>{item.name}</span>
+              <span className="font-medium">{item.name}</span>
             </Link>
           );
         })}
       </nav>
 
-      <div className="mt-8 pt-8 border-t border-secondary/30">
+      <div className="p-4 border-t border-secondary/30">
         <button
-          onClick={() => {
-            localStorage.removeItem('accessToken');
-            localStorage.removeItem('refreshToken');
-            window.location.href = '/login';
-          }}
-          className="flex items-center space-x-3 px-4 py-3 rounded-lg text-text-secondary hover:bg-background-card hover:text-text-primary w-full transition-colors"
+          onClick={handleLogout}
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted hover:bg-secondary/10 hover:text-text-primary transition-colors"
         >
           <LogOut size={20} />
-          <span>Logout</span>
+          <span className="font-medium">Logout</span>
         </button>
       </div>
     </div>
   );
 }
-
