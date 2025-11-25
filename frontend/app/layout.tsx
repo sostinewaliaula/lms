@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { ThemeProvider } from '@/contexts/ThemeContext';
+import ThemeProviderWrapper from '@/components/providers/ThemeProviderWrapper';
 
 export const metadata: Metadata = {
   title: 'Caava Group - Caava Knowledge Center',
@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProviderWrapper>{children}</ThemeProviderWrapper>
       </body>
     </html>
   );
