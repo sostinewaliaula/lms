@@ -287,10 +287,10 @@ export default function LandingPage() {
               />
               <div>
                 <div className="text-lg font-bold">
-                  <span className="text-primary">Caava</span>{' '}
-                  <span className="text-secondary">Group</span>
+                  <span className="text-primary">Knowledge</span>{' '}
+                  <span className="text-secondary">Center</span>
                 </div>
-                <div className="text-xs text-text-muted">Knowledge Center</div>
+                <div className="text-sm text-text-muted brand-subtitle">TQ Academy</div>
               </div>
             </div>
             <div className="flex items-center gap-4">
@@ -882,10 +882,10 @@ export default function LandingPage() {
                 />
                 <div>
                   <div className="font-bold">
-                    <span className="text-primary">Caava</span>{' '}
-                    <span className="text-secondary">Group</span>
+                    <span className="text-primary">Knowledge</span>{' '}
+                    <span className="text-secondary">Center</span>
                   </div>
-                  <div className="text-xs text-text-muted">Knowledge Center</div>
+                  <div className="text-sm text-text-muted brand-subtitle">TQ Academy</div>
                 </div>
               </div>
               <p className="text-text-muted text-sm">
