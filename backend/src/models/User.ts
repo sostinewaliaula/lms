@@ -20,6 +20,7 @@ export interface CreateUserData {
   first_name: string;
   last_name: string;
   role?: 'admin' | 'instructor' | 'student';
+  department_id?: string;
 }
 
 export class UserModel {
@@ -40,10 +41,20 @@ export class UserModel {
   }
 
   static async create(data: CreateUserData): Promise<User> {
+    const columns = ['email', 'password_hash', 'first_name', 'last_name', 'role'];
+    const placeholders = ['?', '?', '?', '?', '?'];
+    const values: any[] = [data.email, data.password_hash, data.first_name, data.last_name, data.role || 'student'];
+
+    if (data.department_id) {
+      columns.push('department_id');
+      placeholders.push('?');
+      values.push(data.department_id);
+    }
+
     await pool.query(
-      `INSERT INTO users (email, password_hash, first_name, last_name, role)
-       VALUES (?, ?, ?, ?, ?)`,
-      [data.email, data.password_hash, data.first_name, data.last_name, data.role || 'student']
+      `INSERT INTO users (${columns.join(', ')})
+       VALUES (${placeholders.join(', ')})`,
+      values
     );
     const result = await pool.query(
       'SELECT * FROM users WHERE email = ?',

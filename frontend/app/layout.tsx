@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import ThemeProviderWrapper from '@/components/providers/ThemeProviderWrapper';
+import { Toaster } from 'react-hot-toast';
 
 export const metadata: Metadata = {
   title: 'Caava Group - Caava Knowledge Center',
@@ -23,7 +24,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <ThemeProviderWrapper>{children}</ThemeProviderWrapper>
+        <ThemeProviderWrapper>
+          {children}
+          <Toaster position="top-right" toastOptions={{ duration: 4000 }} />
+        </ThemeProviderWrapper>
       </body>
     </html>
   );

@@ -18,6 +18,15 @@ export interface User {
   };
 }
 
+export interface CreateUserPayload {
+  first_name: string;
+  last_name: string;
+  email: string;
+  role: User['role'];
+  department_id?: string;
+  password: string;
+}
+
 export const getUsers = async (params?: {
   role?: string;
   department_id?: string;
@@ -39,7 +48,12 @@ export const updateUser = async (id: string, data: Partial<User>): Promise<User>
   return response.data.user;
 };
 
-export const deleteUser = async (id: string): Promise<void> => {
-  await apiClient.delete(`/users/${id}`);
+export const createUser = async (data: CreateUserPayload): Promise<User> => {
+  const response = await apiClient.post('/users', data);
+  return response.data.user;
+};
+
+export const deleteUser = async (id: string, options?: { hard?: boolean }): Promise<void> => {
+  await apiClient.delete(`/users/${id}`, { params: options });
 };
 

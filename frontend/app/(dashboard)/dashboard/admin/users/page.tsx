@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import Link from 'next/link';
 import {
   Users,
   Search,
@@ -12,9 +11,11 @@ import {
   UserCheck,
   UserX,
   Power,
+  Trash2,
 } from 'lucide-react';
-import { getUsers, updateUser, deleteUser, User as UserType } from '@/lib/api/users';
+import { getUsers, updateUser, deleteUser, createUser, User as UserType } from '@/lib/api/users';
 import { getDepartments } from '@/lib/api/departments';
+import toast from 'react-hot-toast';
 
 type EditFormState = {
   first_name: string;
@@ -36,6 +37,9 @@ export default function AdminUsersPage() {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [selectedUser, setSelectedUser] = useState<UserType | null>(null);
+  const [confirmAction, setConfirmAction] = useState<{ type: 'deactivate' | 'delete'; user: UserType | null } | null>(null);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
   const [editForm, setEditForm] = useState<EditFormState>({
     first_name: '',
     last_name: '',
@@ -44,7 +48,16 @@ export default function AdminUsersPage() {
     department_id: '',
     is_active: true,
   });
+  const [createForm, setCreateForm] = useState({
+    first_name: '',
+    last_name: '',
+    email: '',
+    role: 'student' as UserType['role'],
+    department_id: '',
+    password: '',
+  });
   const [saving, setSaving] = useState(false);
+  const [creating, setCreating] = useState(false);
   const limit = 20;
 
   useEffect(() => {
@@ -88,6 +101,13 @@ export default function AdminUsersPage() {
   const fetchUsers = async () => {
     try {
       setLoading(true);
+      console.log('[AdminUsers] Fetching users', {
+        search,
+        role: roleFilter,
+        department: deptFilter,
+        page,
+        limit,
+      });
       const response = await getUsers({
         search: search || undefined,
         role: roleFilter || undefined,
@@ -95,10 +115,12 @@ export default function AdminUsersPage() {
         limit,
         offset: (page - 1) * limit,
       });
+      console.log('[AdminUsers] Users response', response);
       setUsers(Array.isArray(response.users) ? response.users : []);
       setTotal(typeof response.total === 'number' ? response.total : 0);
     } catch (error) {
       console.error('Error fetching users:', error);
+      toast.error('Unable to load users');
     } finally {
       setLoading(false);
     }
@@ -107,6 +129,7 @@ export default function AdminUsersPage() {
   const fetchDepartments = async () => {
     try {
       const depts = await getDepartments();
+      console.log('[AdminUsers] Departments response', depts);
       setDepartments(Array.isArray(depts) ? depts : depts?.departments || []);
     } catch (error) {
       console.error('Error fetching departments:', error);
@@ -115,19 +138,32 @@ export default function AdminUsersPage() {
   };
 
   const handleDeactivate = async (id: string) => {
-    if (!confirm('Are you sure you want to deactivate this user?')) return;
     try {
       await deleteUser(id);
       fetchUsers();
     } catch (error) {
       console.error('Error deleting user:', error);
-      alert('Failed to deactivate user');
+      toast.error('Failed to deactivate user');
+      return;
     }
+    toast.success('User deactivated');
+  };
+
+  const handleHardDelete = async (id: string) => {
+    try {
+      await deleteUser(id, { hard: true });
+      fetchUsers();
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      toast.error('Failed to delete user');
+      return;
+    }
+    toast.success('User deleted permanently');
   };
 
   const handleToggleStatus = async (user: UserType) => {
     if (user.is_active) {
-      await handleDeactivate(user.id);
+      setConfirmAction({ type: 'deactivate', user });
       return;
     }
 
@@ -136,8 +172,10 @@ export default function AdminUsersPage() {
       fetchUsers();
     } catch (error) {
       console.error('Error updating user status:', error);
-      alert('Failed to update user status');
+      toast.error('Failed to update user status');
+      return;
     }
+    toast.success('User reactivated');
   };
 
   const handleEditChange = (field: keyof EditFormState, value: string | boolean) => {
@@ -169,9 +207,68 @@ export default function AdminUsersPage() {
       fetchUsers();
     } catch (error) {
       console.error('Error updating user:', error);
-      alert('Failed to update user');
+      toast.error('Failed to update user');
+      return;
     } finally {
       setSaving(false);
+    }
+    toast.success('User updated');
+  };
+
+  const handleCreateChange = (field: keyof typeof createForm, value: string) => {
+    setCreateForm((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const resetCreateForm = () => {
+    setCreateForm({
+      first_name: '',
+      last_name: '',
+      email: '',
+      role: 'student',
+      department_id: '',
+      password: '',
+    });
+  };
+
+  const handleCreateUser = async () => {
+    if (!createForm.first_name || !createForm.last_name || !createForm.email || !createForm.password) {
+      toast.error('Please provide name, email, and a temporary password.');
+      return;
+    }
+
+    setCreating(true);
+    try {
+      await createUser({
+        ...createForm,
+        department_id: createForm.department_id || undefined,
+      });
+      resetCreateForm();
+      setShowCreateModal(false);
+      fetchUsers();
+    } catch (error: any) {
+      console.error('Error creating user:', error);
+      toast.error(error?.response?.data?.error || 'Failed to create user');
+    } finally {
+      setCreating(false);
+    }
+    toast.success('User created');
+  };
+
+  const handleConfirmAction = async () => {
+    if (!confirmAction?.user) return;
+    setConfirmLoading(true);
+    try {
+      if (confirmAction.type === 'deactivate') {
+        await handleDeactivate(confirmAction.user.id);
+      } else {
+        await handleHardDelete(confirmAction.user.id);
+      }
+      setConfirmAction(null);
+    } finally {
+      setConfirmLoading(false);
     }
   };
 
@@ -223,13 +320,13 @@ export default function AdminUsersPage() {
             <RefreshCw size={18} />
             Refresh
           </button>
-          <Link
-            href="/dashboard/admin/users/create"
+          <button
+            onClick={() => setShowCreateModal(true)}
             className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-primary/30 hover:bg-primary/90 transition whitespace-nowrap"
           >
             <UserPlus size={18} />
             Add User
-          </Link>
+          </button>
         </div>
       </section>
 
@@ -440,6 +537,13 @@ export default function AdminUsersPage() {
                           <Edit3 size={16} />
                         </button>
                         <button
+                          onClick={() => setConfirmAction({ type: 'delete', user })}
+                          className="rounded-full border border-secondary/30 p-2 text-red-400 hover:border-red-400 hover:bg-red-500/10 transition"
+                          aria-label="Delete user"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                        <button
                           onClick={() => handleToggleStatus(user)}
                           className={`rounded-full border p-2 transition ${
                             user.is_active
@@ -586,6 +690,155 @@ export default function AdminUsersPage() {
                 className="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-primary/30 hover:bg-primary/90 disabled:opacity-60"
               >
                 {saving ? 'Updating...' : 'Save changes'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {confirmAction?.user && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+          <div className="w-full max-w-md rounded-2xl bg-background-card border border-secondary/30 p-6 shadow-2xl shadow-primary/20">
+            <div className="space-y-2 text-center">
+              <p className="text-xs uppercase tracking-[0.3em] text-primary font-semibold">
+                {confirmAction.type === 'deactivate' ? 'Deactivate User' : 'Delete User'}
+              </p>
+              <h3 className="text-2xl font-semibold text-text-primary">
+                {confirmAction.user.first_name} {confirmAction.user.last_name}
+              </h3>
+              <p className="text-sm text-text-muted">
+                {confirmAction.type === 'deactivate'
+                  ? 'This user will immediately lose access but can be reactivated later.'
+                  : 'This permanently removes the user and their profile. This action cannot be undone.'}
+              </p>
+            </div>
+            <div className="mt-6 flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setConfirmAction(null)}
+                className="rounded-xl border border-secondary/30 px-4 py-2 text-sm font-medium text-text-primary hover:border-primary/50"
+                disabled={confirmLoading}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmAction}
+                disabled={confirmLoading}
+                className={`rounded-xl px-4 py-2 text-sm font-semibold text-white shadow-lg transition ${
+                  confirmAction.type === 'deactivate'
+                    ? 'bg-amber-500 hover:bg-amber-500/90 shadow-amber-500/30'
+                    : 'bg-red-500 hover:bg-red-500/90 shadow-red-500/30'
+                } disabled:opacity-60`}
+              >
+                {confirmLoading
+                  ? 'Processing...'
+                  : confirmAction.type === 'deactivate'
+                  ? 'Deactivate'
+                  : 'Delete'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showCreateModal && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+          <div className="w-full max-w-2xl rounded-2xl bg-background-card border border-secondary/30 p-6 shadow-2xl shadow-primary/20">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <p className="text-xs uppercase tracking-[0.3em] text-primary font-semibold">Create user</p>
+                <h2 className="text-2xl font-semibold text-text-primary mt-1">Invite to Knowledge Center</h2>
+              </div>
+              <button className="text-text-muted hover:text-text-primary" onClick={() => setShowCreateModal(false)}>
+                ✕
+              </button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs font-semibold text-text-muted uppercase">First name</label>
+                <input
+                  type="text"
+                  value={createForm.first_name}
+                  onChange={(e) => handleCreateChange('first_name', e.target.value)}
+                  className="mt-1 w-full rounded-xl border border-secondary/30 bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-text-muted uppercase">Last name</label>
+                <input
+                  type="text"
+                  value={createForm.last_name}
+                  onChange={(e) => handleCreateChange('last_name', e.target.value)}
+                  className="mt-1 w-full rounded-xl border border-secondary/30 bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-text-muted uppercase">Email</label>
+                <input
+                  type="email"
+                  value={createForm.email}
+                  onChange={(e) => handleCreateChange('email', e.target.value)}
+                  className="mt-1 w-full rounded-xl border border-secondary/30 bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-text-muted uppercase">Role</label>
+                <select
+                  value={createForm.role}
+                  onChange={(e) => handleCreateChange('role', e.target.value as UserType['role'])}
+                  className="mt-1 w-full rounded-xl border border-secondary/30 bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
+                >
+                  <option value="admin">Admin</option>
+                  <option value="instructor">Instructor</option>
+                  <option value="student">Student</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-text-muted uppercase">Department</label>
+                <select
+                  value={createForm.department_id}
+                  onChange={(e) => handleCreateChange('department_id', e.target.value)}
+                  className="mt-1 w-full rounded-xl border border-secondary/30 bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
+                >
+                  <option value="">Unassigned</option>
+                  {departments.map((dept) => (
+                    <option key={dept.id} value={dept.id}>
+                      {dept.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-text-muted uppercase">Temporary password</label>
+                <input
+                  type="text"
+                  value={createForm.password}
+                  onChange={(e) => handleCreateChange('password', e.target.value)}
+                  className="mt-1 w-full rounded-xl border border-secondary/30 bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
+                  placeholder="Provide initial password"
+                />
+              </div>
+            </div>
+            <div className="mt-6 flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowCreateModal(false);
+                  resetCreateForm();
+                }}
+                className="rounded-xl border border-secondary/30 px-4 py-2 text-sm font-medium text-text-primary hover:border-primary/50"
+                disabled={creating}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleCreateUser}
+                disabled={creating}
+                className="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-primary/30 hover:bg-primary/90 disabled:opacity-60"
+              >
+                {creating ? 'Creating...' : 'Create user'}
               </button>
             </div>
           </div>
