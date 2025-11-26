@@ -44,6 +44,8 @@ import userRoutes from './routes/users';
 import tagRoutes from './routes/tags';
 import learningPathRoutes from './routes/learningPaths';
 import skillRoutes from './routes/skills';
+import badgeRoutes from './routes/badges';
+import achievementRoutes from './routes/achievements';
 
 // Health check
 app.get('/health', (req, res) => {
@@ -66,6 +68,8 @@ app.use('/api/users', userRoutes);
 app.use('/api/tags', tagRoutes);
 app.use('/api/learning-paths', learningPathRoutes);
 app.use('/api/skills', skillRoutes);
+app.use('/api/badges', badgeRoutes);
+app.use('/api/achievements', achievementRoutes);
 
 // Socket.io connection handling
 io.on('connection', (socket) => {
