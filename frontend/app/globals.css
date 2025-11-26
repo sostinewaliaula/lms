@@ -360,28 +360,32 @@ a {
 
 /* Background Grid Pattern */
 .background-grid {
+  position: absolute;
+  inset: 0;
   background-image: 
     linear-gradient(var(--secondary) 1px, transparent 1px),
     linear-gradient(90deg, var(--secondary) 1px, transparent 1px);
   background-size: 50px 50px;
-  opacity: 0.1;
+  opacity: 0.08;
   animation: slide-diagonal 20s linear infinite;
 }
 
 .dark .background-grid {
-  opacity: 0.15;
+  opacity: 0.13;
 }
 
 /* Background Dots Pattern */
 .background-dots {
+  position: absolute;
+  inset: 0;
   background-image: radial-gradient(circle, var(--primary) 1px, transparent 1px);
   background-size: 30px 30px;
-  opacity: 0.1;
+  opacity: 0.08;
   animation: float-slow 15s ease-in-out infinite;
 }
 
 .dark .background-dots {
-  opacity: 0.15;
+  opacity: 0.12;
 }
 
 /* Decorative Blob Shapes */
@@ -432,12 +436,13 @@ a {
 }
 
 .shape-diamond {
-  width: 0;
-  height: 0;
-  border: 50px solid transparent;
-  border-bottom-color: var(--secondary);
+  width: 80px;
+  height: 80px;
+  background: var(--secondary);
   transform: rotate(45deg);
-  animation: rotate-slow 20s linear infinite;
+  border-radius: 18px;
+  filter: blur(0.5px);
+  animation: rotate-slow 25s linear infinite;
 }
 
 .shape-triangle {
@@ -447,6 +452,25 @@ a {
   border-right: 30px solid transparent;
   border-bottom: 50px solid var(--primary);
   animation: float-vertical 6s ease-in-out infinite;
+}
+
+.shape-star {
+  width: 70px;
+  height: 70px;
+  background: var(--primary);
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  animation: rotate-slow 18s linear infinite;
+  opacity: 0.12;
+  filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.2));
+}
+
+.shape-ring {
+  width: 140px;
+  height: 140px;
+  border: 1px solid var(--secondary);
+  border-radius: 50%;
+  animation: pulse-glow 5s ease-in-out infinite;
+  opacity: 0.15;
 }
 
 /* Section Background with Pattern */

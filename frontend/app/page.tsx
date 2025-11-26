@@ -193,31 +193,90 @@ export default function LandingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-background relative">
+    <div className="min-h-screen bg-background relative overflow-hidden">
       {/* Global Background Graphics */}
-      <div className="fixed inset-0 background-grid pointer-events-none z-0"></div>
-      <div className="fixed inset-0 background-dots pointer-events-none z-0"></div>
-      
-      {/* Decorative floating shapes */}
-      <div className="fixed top-20 left-10 w-96 h-96 bg-primary decorative-blob" style={{ animationDelay: '0s' }}></div>
-      <div className="fixed top-40 right-20 w-80 h-80 bg-secondary decorative-blob" style={{ animationDelay: '5s' }}></div>
-      <div className="fixed bottom-20 left-1/4 w-72 h-72 bg-primary decorative-blob" style={{ animationDelay: '10s' }}></div>
-      <div className="fixed bottom-40 right-1/3 w-64 h-64 bg-secondary decorative-blob" style={{ animationDelay: '15s' }}></div>
-      
-      {/* Animated geometric shapes */}
-      <div className="geometric-shape shape-circle w-32 h-32 top-32 left-1/4" style={{ animationDelay: '0s' }}></div>
-      <div className="geometric-shape shape-circle w-24 h-24 top-1/2 right-1/4" style={{ animationDelay: '2s' }}></div>
-      <div className="geometric-shape shape-diamond top-1/3 right-1/3" style={{ animationDelay: '1s' }}></div>
-      <div className="geometric-shape shape-triangle bottom-1/4 left-1/3" style={{ animationDelay: '3s' }}></div>
-      
-      {/* Animated lines */}
-      <div className="animated-line w-1/3 top-1/4 left-0" style={{ animationDelay: '0s' }}></div>
-      <div className="animated-line w-1/4 top-2/3 right-0" style={{ animationDelay: '2s' }}></div>
-      <div className="animated-line-vertical h-1/2 top-1/4 right-1/4" style={{ animationDelay: '1s' }}></div>
-      <div className="animated-line-vertical h-1/3 bottom-1/4 left-1/3" style={{ animationDelay: '3s' }}></div>
-      
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 navbar-background border-b border-secondary/30">
+      <div className="pointer-events-none fixed inset-0 z-0">
+        <div className="background-grid"></div>
+        <div className="background-dots"></div>
+        
+        {/* Decorative floating blobs */}
+        <div
+          className="decorative-blob absolute"
+          style={{ top: '6%', left: '5%', width: '26rem', height: '26rem', background: 'rgba(16, 185, 129, 0.35)', animationDelay: '0s' }}
+        ></div>
+        <div
+          className="decorative-blob-2 absolute"
+          style={{ top: '15%', right: '8%', width: '22rem', height: '22rem', background: 'rgba(139, 92, 246, 0.3)', animationDelay: '4s' }}
+        ></div>
+        <div
+          className="decorative-blob absolute"
+          style={{ bottom: '8%', left: '20%', width: '20rem', height: '20rem', background: 'rgba(16, 185, 129, 0.25)', animationDelay: '8s' }}
+        ></div>
+        <div
+          className="decorative-blob-2 absolute"
+          style={{ bottom: '12%', right: '25%', width: '18rem', height: '18rem', background: 'rgba(139, 92, 246, 0.25)', animationDelay: '12s' }}
+        ></div>
+
+        {/* Animated geometric shapes */}
+        <div
+          className="geometric-shape shape-circle"
+          style={{ top: '18%', left: '10%', width: '160px', height: '160px', animationDelay: '0s' }}
+        ></div>
+        <div
+          className="geometric-shape shape-circle"
+          style={{ top: '55%', right: '18%', width: '110px', height: '110px', animationDelay: '2s' }}
+        ></div>
+        <div
+          className="geometric-shape shape-diamond"
+          style={{ top: '32%', right: '20%', animationDelay: '1s' }}
+        ></div>
+        <div
+          className="geometric-shape shape-diamond"
+          style={{ bottom: '18%', left: '12%', animationDelay: '3s' }}
+        ></div>
+        <div
+          className="geometric-shape shape-triangle"
+          style={{ bottom: '10%', right: '8%', animationDelay: '2s' }}
+        ></div>
+        <div
+          className="geometric-shape shape-star"
+          style={{ top: '24%', right: '12%', width: '90px', height: '90px', animationDelay: '1.5s' }}
+        ></div>
+        <div
+          className="geometric-shape shape-star"
+          style={{ top: '65%', left: '8%', width: '60px', height: '60px', animationDelay: '2.5s' }}
+        ></div>
+        <div
+          className="geometric-shape shape-ring"
+          style={{ top: '48%', left: '32%', width: '220px', height: '220px', animationDelay: '0.5s' }}
+        ></div>
+        <div
+          className="geometric-shape shape-ring"
+          style={{ top: '12%', right: '30%', width: '160px', height: '160px', animationDelay: '1.2s' }}
+        ></div>
+
+        {/* Animated lines */}
+        <div
+          className="animated-line"
+          style={{ width: '30%', top: '18%', left: '5%', animationDelay: '0s' }}
+        ></div>
+        <div
+          className="animated-line"
+          style={{ width: '25%', top: '70%', right: '5%', animationDelay: '2s' }}
+        ></div>
+        <div
+          className="animated-line-vertical"
+          style={{ height: '50%', top: '20%', right: '28%', animationDelay: '1s' }}
+        ></div>
+        <div
+          className="animated-line-vertical"
+          style={{ height: '35%', bottom: '12%', left: '25%', animationDelay: '3s' }}
+        ></div>
+      </div>
+
+      <div className="relative z-10">
+        {/* Navigation */}
+        <nav className="fixed top-0 left-0 right-0 z-50 navbar-background border-b border-secondary/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
@@ -810,8 +869,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-12 px-4 sm:px-6 lg:px-8 bg-background border-t border-secondary/30">
+        {/* Footer */}
+        <footer className="py-12 px-4 sm:px-6 lg:px-8 bg-background border-t border-secondary/30">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div>
@@ -888,7 +947,8 @@ export default function LandingPage() {
             <p>&copy; {new Date().getFullYear()} Caava Group. All rights reserved.</p>
           </div>
         </div>
-      </footer>
+        </footer>
+      </div>
     </div>
   );
 }
