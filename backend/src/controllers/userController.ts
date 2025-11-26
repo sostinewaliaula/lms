@@ -2,10 +2,12 @@ import { Request, Response } from 'express';
 import { UserModel } from '../models/User';
 import pool from '../config/database';
 import { getAllRows, getFirstRow } from '../utils/db';
+import { hashPassword } from '../utils/password';
 
 export const getUsers = async (req: Request, res: Response): Promise<void> => {
   try {
     const { role, department_id, search, limit = 50, offset = 0 } = req.query;
+    console.log('[API] GET /users', { role, department_id, search, limit, offset });
 
     let query = `
       SELECT u.*, d.name as department_name, up.bio
@@ -42,10 +44,50 @@ export const getUsers = async (req: Request, res: Response): Promise<void> => {
 
     const [result] = await pool.query(query, params);
     const users = getAllRows(result);
+    console.log('[API] /users result', { total, returned: users.length });
 
     res.json({ users, total, limit: parseInt(limit as string), offset: parseInt(offset as string) });
   } catch (error) {
     console.error('Get users error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+export const createUser = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { first_name, last_name, email, role = 'student', department_id, password } = req.body;
+
+    if (!first_name || !last_name || !email || !password) {
+      res.status(400).json({ error: 'First name, last name, email, and password are required' });
+      return;
+    }
+
+    const existingUser = await UserModel.findByEmail(email);
+    if (existingUser) {
+      res.status(409).json({ error: 'User already exists' });
+      return;
+    }
+
+    const password_hash = await hashPassword(password);
+    const user = await UserModel.create({
+      first_name,
+      last_name,
+      email,
+      role,
+      password_hash,
+      department_id,
+    });
+
+    await pool.query('INSERT INTO user_profiles (user_id) VALUES (?)', [user.id]);
+
+    const { password_hash: _, ...sanitizedUser } = user as any;
+
+    res.status(201).json({
+      message: 'User created successfully',
+      user: sanitizedUser,
+    });
+  } catch (error) {
+    console.error('Create user error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
@@ -112,6 +154,7 @@ export const deleteUser = async (req: Request, res: Response): Promise<void> => 
     const { id } = req.params;
     const authReq = req as any;
     const currentUserId = authReq.user?.id;
+    const hardDelete = req.query.hard === 'true';
 
     if (id === currentUserId) {
       res.status(400).json({ error: 'Cannot delete your own account' });
@@ -121,6 +164,23 @@ export const deleteUser = async (req: Request, res: Response): Promise<void> => 
     const user = await UserModel.findById(id);
     if (!user) {
       res.status(404).json({ error: 'User not found' });
+      return;
+    }
+
+    if (hardDelete) {
+      const connection = await pool.getConnection();
+      try {
+        await connection.beginTransaction();
+        await connection.query('DELETE FROM user_profiles WHERE user_id = ?', [id]);
+        await connection.query('DELETE FROM users WHERE id = ?', [id]);
+        await connection.commit();
+        res.json({ message: 'User deleted permanently' });
+      } catch (err) {
+        await connection.rollback();
+        throw err;
+      } finally {
+        connection.release();
+      }
       return;
     }
 
