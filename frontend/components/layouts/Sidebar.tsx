@@ -20,6 +20,7 @@ import {
   Sparkles,
   Trophy,
   Star,
+  Bell,
 } from 'lucide-react';
 import { authApi } from '@/lib/api/auth';
 import ThemeToggle from '@/components/ThemeToggle';
@@ -59,6 +60,9 @@ const getMenuItems = (userRole?: string) => {
       { name: 'Tags', href: '/dashboard/admin/tags', icon: Hash },
       { name: 'Badges & Achievements', href: '/dashboard/admin/badges-achievements', icon: Trophy },
       { name: 'Reviews', href: '/dashboard/admin/reviews', icon: Star },
+      { name: 'Study Groups', href: '/dashboard/admin/study-groups', icon: Users },
+      { name: 'Leaderboard', href: '/dashboard/admin/leaderboard', icon: Trophy },
+      { name: 'Notifications', href: '/dashboard/admin/notifications', icon: Bell },
       { name: 'Analytics', href: '/dashboard/admin/analytics', icon: BarChart3 },
       { name: 'Forums', href: '/dashboard/forums', icon: MessageSquare },
       { name: 'Settings', href: '/dashboard/admin/settings', icon: Settings },

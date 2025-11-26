@@ -47,6 +47,9 @@ import skillRoutes from './routes/skills';
 import badgeRoutes from './routes/badges';
 import achievementRoutes from './routes/achievements';
 import reviewRoutes from './routes/reviews';
+import studyGroupRoutes from './routes/studyGroups';
+import leaderboardRoutes from './routes/leaderboard';
+import notificationRoutes from './routes/notifications';
 
 // Health check
 app.get('/health', (req, res) => {
@@ -72,6 +75,9 @@ app.use('/api/skills', skillRoutes);
 app.use('/api/badges', badgeRoutes);
 app.use('/api/achievements', achievementRoutes);
 app.use('/api/reviews', reviewRoutes);
+app.use('/api/study-groups', studyGroupRoutes);
+app.use('/api/leaderboard', leaderboardRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // Socket.io connection handling
 io.on('connection', (socket) => {
