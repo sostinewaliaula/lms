@@ -193,7 +193,29 @@ export default function LandingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative">
+      {/* Global Background Graphics */}
+      <div className="fixed inset-0 background-grid pointer-events-none z-0"></div>
+      <div className="fixed inset-0 background-dots pointer-events-none z-0"></div>
+      
+      {/* Decorative floating shapes */}
+      <div className="fixed top-20 left-10 w-96 h-96 bg-primary decorative-blob" style={{ animationDelay: '0s' }}></div>
+      <div className="fixed top-40 right-20 w-80 h-80 bg-secondary decorative-blob" style={{ animationDelay: '5s' }}></div>
+      <div className="fixed bottom-20 left-1/4 w-72 h-72 bg-primary decorative-blob" style={{ animationDelay: '10s' }}></div>
+      <div className="fixed bottom-40 right-1/3 w-64 h-64 bg-secondary decorative-blob" style={{ animationDelay: '15s' }}></div>
+      
+      {/* Animated geometric shapes */}
+      <div className="geometric-shape shape-circle w-32 h-32 top-32 left-1/4" style={{ animationDelay: '0s' }}></div>
+      <div className="geometric-shape shape-circle w-24 h-24 top-1/2 right-1/4" style={{ animationDelay: '2s' }}></div>
+      <div className="geometric-shape shape-diamond top-1/3 right-1/3" style={{ animationDelay: '1s' }}></div>
+      <div className="geometric-shape shape-triangle bottom-1/4 left-1/3" style={{ animationDelay: '3s' }}></div>
+      
+      {/* Animated lines */}
+      <div className="animated-line w-1/3 top-1/4 left-0" style={{ animationDelay: '0s' }}></div>
+      <div className="animated-line w-1/4 top-2/3 right-0" style={{ animationDelay: '2s' }}></div>
+      <div className="animated-line-vertical h-1/2 top-1/4 right-1/4" style={{ animationDelay: '1s' }}></div>
+      <div className="animated-line-vertical h-1/3 bottom-1/4 left-1/3" style={{ animationDelay: '3s' }}></div>
+      
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 navbar-background border-b border-secondary/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -231,7 +253,36 @@ export default function LandingPage() {
         <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-pulse-slow"></div>
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '1s' }}></div>
         
-        <div className="max-w-7xl mx-auto text-center relative z-10">
+        {/* Animated SVG lines and shapes */}
+        <svg className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-10" style={{ zIndex: 1 }}>
+          <defs>
+            <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="var(--primary)" stopOpacity="0" />
+              <stop offset="50%" stopColor="var(--primary)" stopOpacity="0.5" />
+              <stop offset="100%" stopColor="var(--primary)" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+          <path
+            d="M 0,100 Q 200,50 400,100 T 800,100"
+            stroke="url(#lineGradient)"
+            strokeWidth="2"
+            fill="none"
+            className="animate-pulse-slow"
+            style={{ animationDuration: '4s' }}
+          />
+          <path
+            d="M 100,300 Q 300,250 500,300 T 900,300"
+            stroke="url(#lineGradient)"
+            strokeWidth="2"
+            fill="none"
+            className="animate-pulse-slow"
+            style={{ animationDuration: '5s', animationDelay: '1s' }}
+          />
+          <circle cx="200" cy="150" r="3" fill="var(--primary)" className="animate-pulse-slow" />
+          <circle cx="700" cy="250" r="2" fill="var(--secondary)" className="animate-pulse-slow" style={{ animationDelay: '2s' }} />
+        </svg>
+        
+        <div className="max-w-7xl mx-auto text-center relative" style={{ zIndex: 10 }}>
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/20 border border-primary/30 rounded-full text-primary mb-6 animate-fade-in-up">
             <Zap size={16} className="animate-pulse" />
             <span className="text-sm font-medium">Empowering Your Learning Journey</span>
@@ -281,8 +332,8 @@ export default function LandingPage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 section-with-bg relative">
+        <div className="max-w-7xl mx-auto relative" style={{ zIndex: 10 }}>
           <div className="text-center mb-16 fade-in-on-scroll">
             <h2 className="text-4xl sm:text-5xl font-bold text-text-primary mb-4">
               Your <span className="text-primary">Learning Hub</span>
@@ -313,8 +364,8 @@ export default function LandingPage() {
       </section>
 
       {/* How It Works Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-background-card">
-        <div className="max-w-7xl mx-auto">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-background-card section-with-bg relative">
+        <div className="max-w-7xl mx-auto relative" style={{ zIndex: 10 }}>
           <ScrollReveal>
             <div className="text-center mb-16">
               <h2 className="text-4xl sm:text-5xl font-bold text-text-primary mb-4">
@@ -375,8 +426,8 @@ export default function LandingPage() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 section-with-bg relative">
+        <div className="max-w-7xl mx-auto relative" style={{ zIndex: 10 }}>
           <ScrollReveal>
             <div className="text-center mb-16">
               <h2 className="text-4xl sm:text-5xl font-bold text-text-primary mb-4">
@@ -456,8 +507,8 @@ export default function LandingPage() {
       </section>
 
       {/* Course Categories Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-background-card">
-        <div className="max-w-7xl mx-auto">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-background-card section-with-bg relative">
+        <div className="max-w-7xl mx-auto relative" style={{ zIndex: 10 }}>
           <div className="text-center mb-16">
             <h2 className="text-4xl sm:text-5xl font-bold text-text-primary mb-4">
               Explore by <span className="text-primary">Category</span>
@@ -496,8 +547,8 @@ export default function LandingPage() {
       </section>
 
       {/* Getting Started Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-background-card">
-        <div className="max-w-7xl mx-auto">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-background-card section-with-bg relative">
+        <div className="max-w-7xl mx-auto relative" style={{ zIndex: 10 }}>
           <div className="text-center mb-16">
             <h2 className="text-4xl sm:text-5xl font-bold text-text-primary mb-4">
               Get Started with <span className="text-primary">Your Learning</span>
@@ -625,8 +676,8 @@ export default function LandingPage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 section-with-bg relative">
+        <div className="max-w-4xl mx-auto relative" style={{ zIndex: 10 }}>
           <div className="text-center mb-16">
             <h2 className="text-4xl sm:text-5xl font-bold text-text-primary mb-4">
               Frequently Asked <span className="text-primary">Questions</span>
@@ -680,8 +731,8 @@ export default function LandingPage() {
       </section>
 
       {/* Learning Resources Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-background-card">
-        <div className="max-w-7xl mx-auto">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-background-card section-with-bg relative">
+        <div className="max-w-7xl mx-auto relative" style={{ zIndex: 10 }}>
           <div className="text-center mb-16">
             <h2 className="text-4xl sm:text-5xl font-bold text-text-primary mb-4">
               Additional <span className="text-primary">Resources</span>
@@ -739,8 +790,8 @@ export default function LandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-primary/20 via-secondary/20 to-primary/20">
-        <div className="max-w-4xl mx-auto text-center">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-primary/20 via-secondary/20 to-primary/20 section-with-bg relative">
+        <div className="max-w-4xl mx-auto text-center relative" style={{ zIndex: 10 }}>
           <h2 className="text-4xl sm:text-5xl font-bold text-text-primary mb-6">
             Ready to Access Your Training?
           </h2>
