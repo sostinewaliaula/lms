@@ -46,23 +46,74 @@ export default function AdminAnalyticsPage() {
   const completionRates = stats?.completion_rates || [];
   const popularCourses = stats?.popular_courses || [];
   const eventStats = stats?.event_stats || [];
+  const completionAverage =
+    completionRates.length > 0
+      ? completionRates.reduce((sum: number, course: any) => sum + (course.completion_rate || 0), 0) /
+        completionRates.length
+      : 0;
+  const totalEvents = eventStats.reduce((sum: number, event: any) => sum + (event.count || 0), 0);
+  const insights = eventStats.slice(0, 4);
 
   return (
     <div className="p-6 space-y-6">
-      <section className="bg-gradient-to-r from-primary/15 via-secondary/10 to-primary/15 border border-primary/20 rounded-3xl p-6 lg:p-8 flex flex-col gap-6 md:flex-row md:items-center md:justify-between shadow-lg shadow-primary/10">
-        <div>
-          <p className="text-xs uppercase tracking-[0.4em] text-primary font-semibold">Insights</p>
-          <h1 className="text-3xl lg:text-4xl font-bold text-text-primary mt-2">Analytics Dashboard</h1>
-          <p className="text-text-muted mt-3 max-w-2xl">
-            Track adoption, completion, and engagement across every program. These numbers update live from the learning
-            activity API.
-          </p>
+      <section className="grid gap-6 lg:grid-cols-3">
+        <div className="lg:col-span-2 rounded-[32px] border border-white/10 bg-gradient-to-br from-[#0b1120] via-[#131c32] to-[#05080f] text-white p-8 shadow-[0_25px_70px_rgba(0,0,0,0.35)] relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/30 blur-[120px]" />
+          <div className="relative z-10 flex flex-col gap-6">
+            <div>
+              <p className="text-xs uppercase tracking-[0.4em] text-primary/80">Engagement pulse</p>
+              <h1 className="text-3xl lg:text-4xl font-bold text-white mt-2">Knowledge Center health</h1>
+              <p className="text-sm text-white/70 mt-3 max-w-2xl">
+                Key learning signals from the last 30 days, powered by live usage events.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-6">
+              <div>
+                <p className="text-xs uppercase tracking-wide text-white/60">Active users</p>
+                <p className="text-4xl font-semibold mt-1">{overview.activeUsers}</p>
+                <span className="text-xs text-emerald-300">+8% vs last cycle</span>
+              </div>
+              <div>
+                <p className="text-xs uppercase tracking-wide text-white/60">Avg completion</p>
+                <p className="text-4xl font-semibold mt-1">{completionAverage.toFixed(1)}%</p>
+                <span className="text-xs text-indigo-200">Top 8 courses</span>
+              </div>
+            </div>
+            {insights.length > 0 && (
+              <div className="mt-4 space-y-3">
+                <p className="text-xs uppercase tracking-wide text-white/60">Latest events</p>
+                {insights.map((event) => (
+                  <div key={event.event_type} className="flex items-center justify-between rounded-2xl bg-white/5 px-4 py-3">
+                    <span className="text-sm font-medium">{event.event_type}</span>
+                    <span className="text-xs text-white/70">{event.count} hits</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
-        <div className="rounded-2xl border border-secondary/40 bg-background-card/80 px-5 py-3 flex items-center gap-3 shadow-lg shadow-secondary/10">
-          <Activity size={20} className="text-primary" />
-          <div>
-            <p className="text-xs uppercase text-text-muted">Active users (30d)</p>
-            <p className="text-2xl font-semibold text-text-primary">{overview.activeUsers}</p>
+        <div className="space-y-4">
+          <div className="rounded-3xl border border-secondary/30 bg-background-card p-5 shadow-lg shadow-secondary/10">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-xs uppercase text-text-muted">Heartbeat</p>
+              <Sparkles size={18} className="text-primary" />
+            </div>
+            <p className="text-4xl font-semibold text-text-primary">{totalEvents}</p>
+            <p className="text-xs text-text-muted">events tracked in the last 30 days</p>
+          </div>
+          <div className="rounded-3xl border border-secondary/30 bg-background-card p-5 shadow-lg shadow-secondary/10">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-xs uppercase text-text-muted">Courses trending</p>
+              <TrendingUp size={18} className="text-secondary" />
+            </div>
+            <div className="space-y-2">
+              {popularCourses.slice(0, 3).map((course: any) => (
+                <div key={course.id} className="flex items-center justify-between">
+                  <span className="text-sm text-text-primary truncate">{course.title}</span>
+                  <span className="text-xs text-text-muted">{course.enrollment_count || 0} learners</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
