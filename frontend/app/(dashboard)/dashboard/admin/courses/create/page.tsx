@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { BookOpen, X, Save, Upload } from 'lucide-react';
+import { BookOpen, X, Save, Upload, Hash } from 'lucide-react';
 import { createCourse } from '@/lib/api/courses';
 import { getCategories } from '@/lib/api/categories';
 import { getDepartments } from '@/lib/api/departments';
 import { authApi } from '@/lib/api/auth';
+import { getTags, Tag } from '@/lib/api/tags';
 
 export default function CreateCoursePage() {
   const router = useRouter();
@@ -14,6 +15,8 @@ export default function CreateCoursePage() {
   const [categories, setCategories] = useState<any[]>([]);
   const [departments, setDepartments] = useState<any[]>([]);
   const [instructors, setInstructors] = useState<any[]>([]);
+  const [tags, setTags] = useState<Tag[]>([]);
+  const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
   const [dataLoading, setDataLoading] = useState(true);
   const [formData, setFormData] = useState({
     title: '',
@@ -35,9 +38,10 @@ export default function CreateCoursePage() {
   const fetchData = async () => {
     try {
       setDataLoading(true);
-      const [cats, depts] = await Promise.all([getCategories(), getDepartments()]);
+      const [cats, depts, tagsData] = await Promise.all([getCategories(), getDepartments(), getTags()]);
       setCategories(Array.isArray(cats) ? cats : []);
       setDepartments(Array.isArray(depts) ? depts : []);
+      setTags(Array.isArray(tagsData) ? tagsData : []);
       // TODO: Fetch instructors list
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -61,6 +65,7 @@ export default function CreateCoursePage() {
         category_id: formData.category_id || undefined,
         department_id: formData.department_id || undefined,
         difficulty_level: formData.difficulty_level || undefined,
+        tag_ids: selectedTagIds,
       };
 
       await createCourse(courseData);
@@ -159,6 +164,37 @@ export default function CreateCoursePage() {
                   </option>
                 ))}
               </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-text-primary mb-2 flex items-center gap-1">
+                <Hash size={14} /> Tags (optional)
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {tags.map((tag) => {
+                  const active = selectedTagIds.includes(tag.id);
+                  return (
+                    <button
+                      key={tag.id}
+                      type="button"
+                      onClick={() =>
+                        setSelectedTagIds((prev) =>
+                          prev.includes(tag.id) ? prev.filter((id) => id !== tag.id) : [...prev, tag.id]
+                        )
+                      }
+                      className={`px-3 py-1 rounded-full text-xs border transition ${
+                        active
+                          ? 'bg-primary text-white border-primary'
+                          : 'bg-background border-secondary/30 text-text-muted hover:border-primary/50'
+                      }`}
+                    >
+                      {tag.name}
+                    </button>
+                  );
+                })}
+                {tags.length === 0 && (
+                  <p className="text-xs text-text-muted">No tags yet. Create some in Admin → Tags.</p>
+                )}
+              </div>
             </div>
 
             <div>

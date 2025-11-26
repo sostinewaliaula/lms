@@ -14,12 +14,23 @@ export const createCourse = async (req: Request, res: Response): Promise<void> =
       return;
     }
 
+    const { tag_ids, ...rest } = req.body;
+
     const courseData = {
-      ...req.body,
+      ...rest,
       instructor_id,
     };
 
     const course = await CourseModel.create(courseData);
+
+    // Handle tags junctions if provided
+    if (Array.isArray(tag_ids) && tag_ids.length > 0) {
+      const values = tag_ids.map((tagId: string) => [course.id, tagId]);
+      await pool.query(
+        'INSERT INTO course_tags_junction (course_id, tag_id) VALUES ?',
+        [values]
+      );
+    }
 
     res.status(201).json({ message: 'Course created successfully', course });
   } catch (error) {
@@ -160,7 +171,21 @@ export const updateCourse = async (req: Request, res: Response): Promise<void> =
       return;
     }
 
-    const updatedCourse = await CourseModel.update(id, req.body);
+    const { tag_ids, ...rest } = req.body;
+
+    const updatedCourse = await CourseModel.update(id, rest);
+
+    // Update tags junctions if provided
+    if (Array.isArray(tag_ids)) {
+      await pool.query('DELETE FROM course_tags_junction WHERE course_id = ?', [id]);
+      if (tag_ids.length > 0) {
+        const values = tag_ids.map((tagId: string) => [id, tagId]);
+        await pool.query(
+          'INSERT INTO course_tags_junction (course_id, tag_id) VALUES ?',
+          [values]
+        );
+      }
+    }
     res.json({ message: 'Course updated successfully', course: updatedCourse });
   } catch (error) {
     console.error('Update course error:', error);
