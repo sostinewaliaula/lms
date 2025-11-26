@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Building2, Plus, Edit, Trash2, Users, BookOpen, GraduationCap, Search, Sparkles } from 'lucide-react';
-import toast from 'react-hot-toast';
+import toast from '@/lib/toast';
 import {
   getDepartments,
   createDepartment,
@@ -39,29 +39,16 @@ export default function AdminDepartmentsPage() {
   };
 
   const showToast = (tone: 'success' | 'error', title: string, message: string) => {
-    const palette =
-      tone === 'success'
-        ? 'text-green-500 border-green-200 dark:border-green-500/40'
-        : 'text-red-500 border-red-200 dark:border-red-500/40';
+    const toastOptions = {
+      subtitle: message,
+      duration: 4000,
+    };
 
-    toast.custom(
-      <div className="relative min-w-[260px] rounded-3xl border bg-background shadow-lg shadow-black/10 dark:shadow-black/40 px-5 py-4">
-        <div className="absolute inset-0 rounded-3xl border border-white/40 dark:border-white/10 pointer-events-none" />
-        <div className="flex items-start gap-3">
-          <div className={`mt-0.5 flex h-8 w-8 items-center justify-center rounded-full border bg-background ${palette}`}>
-            {tone === 'success' ? '✓' : '✕'}
-          </div>
-          <div className="flex-1">
-            <p className="text-sm font-semibold text-text-primary">{title}</p>
-            <p className="text-xs text-text-muted">{message}</p>
-          </div>
-          <button onClick={() => toast.dismiss()} className="text-text-muted hover:text-text-primary text-xs font-semibold">
-            ✕
-          </button>
-        </div>
-      </div>,
-      { duration: 4000 }
-    );
+    if (tone === 'success') {
+      toastSuccess(title, toastOptions);
+    } else {
+      toastError(title, toastOptions);
+    }
   };
 
   const filteredDepartments = useMemo(() => {

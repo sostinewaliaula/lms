@@ -10,7 +10,7 @@ import {
   Tooltip as RechartsTooltip,
 } from 'recharts';
 import { getDashboardStats } from '@/lib/api/analytics';
-import toast from 'react-hot-toast';
+import toast from '@/lib/toast';
 
 export default function AdminAnalyticsPage() {
   const [stats, setStats] = useState<any>(null);

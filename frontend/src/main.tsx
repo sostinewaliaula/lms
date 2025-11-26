@@ -13,12 +13,17 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <App />
         <Toaster
           position="top-right"
+          containerStyle={{
+            top: 20,
+            right: 20,
+          }}
           toastOptions={{
-            duration: 4000,
+            duration: 5000,
             style: {
               background: 'transparent',
               boxShadow: 'none',
               padding: 0,
+              margin: 0,
             },
           }}
         />

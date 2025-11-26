@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Award, Trophy, Medal, Star, Edit, Trash2, Plus, Search, Users, Sparkles } from 'lucide-react';
 import { getBadges, createBadge, updateBadge, deleteBadge, Badge } from '@/lib/api/badges';
 import { getAchievements, createAchievement, updateAchievement, deleteAchievement, Achievement } from '@/lib/api/achievements';
-import toast from 'react-hot-toast';
+import toast from '@/lib/toast';
 
 type TabType = 'badges' | 'achievements';
 
@@ -29,24 +29,10 @@ export default function AdminBadgesAchievementsPage() {
   }, [activeTab]);
 
   const showToast = (title: string, message: string) => {
-    toast.custom(
-      <div className="relative min-w-[260px] rounded-3xl border bg-background shadow-lg shadow-black/10 dark:shadow-black/40 px-5 py-4">
-        <div className="absolute inset-0 rounded-3xl border border-white/40 dark:border-white/10 pointer-events-none" />
-        <div className="flex items-start gap-3">
-          <div className="mt-0.5 flex h-8 w-8 items-center justify-center rounded-full border bg-background text-primary border-primary/40">
-            ✓
-          </div>
-          <div className="flex-1">
-            <p className="text-sm font-semibold text-text-primary">{title}</p>
-            <p className="text-xs text-text-muted">{message}</p>
-          </div>
-          <button onClick={() => toast.dismiss()} className="text-text-muted hover:text-text-primary text-xs font-semibold">
-            ✕
-          </button>
-        </div>
-      </div>,
-      { duration: 3500 }
-    );
+    toastSuccess(title, {
+      subtitle: message,
+      duration: 3500,
+    });
   };
 
   const fetchData = async () => {

@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { getUsers, updateUser, deleteUser, createUser, User as UserType } from '@/lib/api/users';
 import { getDepartments } from '@/lib/api/departments';
-import toast from 'react-hot-toast';
+import toast, { toastSuccess, toastInfo, toastWarning, toastError } from '@/lib/toast';
 
 type EditFormState = {
   first_name: string;
@@ -59,35 +59,24 @@ export default function AdminUsersPage() {
   const limit = 20;
 
   const showToast = (tone: 'success' | 'error' | 'warning', title: string, message: string) => {
-    const toneMap = {
-      success: { icon: '✓', accent: 'text-green-500 border-green-200 dark:border-green-500/40' },
-      error: { icon: '✕', accent: 'text-red-500 border-red-200 dark:border-red-500/40' },
-      warning: { icon: '!', accent: 'text-amber-500 border-amber-200 dark:border-amber-500/40' },
-    } as const;
+    const toastOptions = {
+      subtitle: message,
+      duration: 4000,
+    };
 
-    const palette = toneMap[tone];
-
-    toast.custom(
-      <div className="relative min-w-[260px] rounded-3xl border bg-background shadow-lg shadow-black/10 dark:shadow-black/40 px-5 py-4">
-        <div className="absolute inset-0 rounded-3xl border border-white/40 dark:border-white/10 pointer-events-none" />
-        <div className="flex items-start gap-3">
-          <div className={`mt-0.5 flex h-8 w-8 items-center justify-center rounded-full border bg-background ${palette.accent}`}>
-            {palette.icon}
-          </div>
-          <div className="flex-1">
-            <p className="text-sm font-semibold text-text-primary">{title}</p>
-            <p className="text-xs text-text-muted">{message}</p>
-          </div>
-          <button
-            onClick={() => toast.dismiss()}
-            className="text-text-muted hover:text-text-primary text-xs font-semibold"
-          >
-            ✕
-          </button>
-        </div>
-      </div>,
-      { duration: 4000 }
-    );
+    switch (tone) {
+      case 'success':
+        toastSuccess(title, toastOptions);
+        break;
+      case 'error':
+        toastError(title, toastOptions);
+        break;
+      case 'warning':
+        toastWarning(title, toastOptions);
+        break;
+      default:
+        toastInfo(title, toastOptions);
+    }
   };
 
   useEffect(() => {

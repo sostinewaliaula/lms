@@ -5,7 +5,7 @@ import { getCourse, updateCourse, deleteCourse, Course } from '@/lib/api/courses
 import { getCategories } from '@/lib/api/categories';
 import { getDepartments } from '@/lib/api/departments';
 import { getTags, Tag } from '@/lib/api/tags';
-import toast from 'react-hot-toast';
+import toast from '@/lib/toast';
 
 export default function EditCoursePage() {
   const navigate = useNavigate();
