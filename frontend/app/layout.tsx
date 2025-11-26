@@ -26,7 +26,17 @@ export default function RootLayout({
       <body>
         <ThemeProviderWrapper>
           {children}
-          <Toaster position="top-right" toastOptions={{ duration: 4000 }} />
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              duration: 4000,
+              style: {
+                background: 'transparent',
+                boxShadow: 'none',
+                padding: 0,
+              },
+            }}
+          />
         </ThemeProviderWrapper>
       </body>
     </html>

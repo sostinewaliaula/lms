@@ -60,6 +60,38 @@ export default function AdminUsersPage() {
   const [creating, setCreating] = useState(false);
   const limit = 20;
 
+  const showToast = (tone: 'success' | 'error' | 'warning', title: string, message: string) => {
+    const toneMap = {
+      success: { icon: '✓', accent: 'text-green-500 border-green-200 dark:border-green-500/40' },
+      error: { icon: '✕', accent: 'text-red-500 border-red-200 dark:border-red-500/40' },
+      warning: { icon: '!', accent: 'text-amber-500 border-amber-200 dark:border-amber-500/40' },
+    } as const;
+
+    const palette = toneMap[tone];
+
+    toast.custom(
+      <div className="relative min-w-[260px] rounded-3xl border bg-background shadow-lg shadow-black/10 dark:shadow-black/40 px-5 py-4">
+        <div className="absolute inset-0 rounded-3xl border border-white/40 dark:border-white/10 pointer-events-none" />
+        <div className="flex items-start gap-3">
+          <div className={`mt-0.5 flex h-8 w-8 items-center justify-center rounded-full border bg-background ${palette.accent}`}>
+            {palette.icon}
+          </div>
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-text-primary">{title}</p>
+            <p className="text-xs text-text-muted">{message}</p>
+          </div>
+          <button
+            onClick={() => toast.dismiss()}
+            className="text-text-muted hover:text-text-primary text-xs font-semibold"
+          >
+            ✕
+          </button>
+        </div>
+      </div>,
+      { duration: 4000 }
+    );
+  };
+
   useEffect(() => {
     fetchUsers();
   }, [page, roleFilter, deptFilter, search]);
@@ -120,7 +152,7 @@ export default function AdminUsersPage() {
       setTotal(typeof response.total === 'number' ? response.total : 0);
     } catch (error) {
       console.error('Error fetching users:', error);
-      toast.error('Unable to load users');
+      showToast('error', 'Unable to load users', 'Please refresh and try again.');
     } finally {
       setLoading(false);
     }
@@ -143,10 +175,10 @@ export default function AdminUsersPage() {
       fetchUsers();
     } catch (error) {
       console.error('Error deleting user:', error);
-      toast.error('Failed to deactivate user');
+      showToast('error', 'Deactivate failed', 'Could not deactivate this user.');
       return;
     }
-    toast.success('User deactivated');
+    showToast('success', 'User deactivated', 'They no longer have access.');
   };
 
   const handleHardDelete = async (id: string) => {
@@ -155,10 +187,10 @@ export default function AdminUsersPage() {
       fetchUsers();
     } catch (error) {
       console.error('Error deleting user:', error);
-      toast.error('Failed to delete user');
+      showToast('error', 'Delete failed', 'Unable to remove this user.');
       return;
     }
-    toast.success('User deleted permanently');
+    showToast('success', 'User deleted', 'Removed permanently.');
   };
 
   const handleToggleStatus = async (user: UserType) => {
@@ -172,10 +204,10 @@ export default function AdminUsersPage() {
       fetchUsers();
     } catch (error) {
       console.error('Error updating user status:', error);
-      toast.error('Failed to update user status');
+      showToast('error', 'Status update failed', 'Unable to change the status.');
       return;
     }
-    toast.success('User reactivated');
+    showToast('success', 'User reactivated', 'Access restored successfully.');
   };
 
   const handleEditChange = (field: keyof EditFormState, value: string | boolean) => {
@@ -207,12 +239,12 @@ export default function AdminUsersPage() {
       fetchUsers();
     } catch (error) {
       console.error('Error updating user:', error);
-      toast.error('Failed to update user');
+      showToast('error', 'Update failed', 'Please try saving again.');
       return;
     } finally {
       setSaving(false);
     }
-    toast.success('User updated');
+    showToast('success', 'User updated', 'Changes saved successfully.');
   };
 
   const handleCreateChange = (field: keyof typeof createForm, value: string) => {
@@ -235,7 +267,7 @@ export default function AdminUsersPage() {
 
   const handleCreateUser = async () => {
     if (!createForm.first_name || !createForm.last_name || !createForm.email || !createForm.password) {
-      toast.error('Please provide name, email, and a temporary password.');
+      showToast('warning', 'Missing details', 'Fill in name, email, and password.');
       return;
     }
 
@@ -250,11 +282,11 @@ export default function AdminUsersPage() {
       fetchUsers();
     } catch (error: any) {
       console.error('Error creating user:', error);
-      toast.error(error?.response?.data?.error || 'Failed to create user');
+      showToast('error', 'Create failed', error?.response?.data?.error || 'Unable to create user.');
     } finally {
       setCreating(false);
     }
-    toast.success('User created');
+    showToast('success', 'User created', 'An invite email has been sent.');
   };
 
   const handleConfirmAction = async () => {
