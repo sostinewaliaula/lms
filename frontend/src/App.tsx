@@ -4,32 +4,32 @@ import { authApi } from './lib/api/auth';
 
 // Pages
 import HomePage from './pages/HomePage';
-import LoginPage from './pages/LoginPage';
+import LoginPage from './pages/auth/LoginPage';
 import DashboardLayout from './layouts/DashboardLayout';
 import DashboardRedirect from './pages/dashboard/DashboardRedirect';
-import AdminDashboard from './pages/dashboard/AdminDashboard';
+import AdminDashboard from './pages/admin/AdminDashboard';
 import InstructorDashboard from './pages/dashboard/InstructorDashboard';
 import StudentDashboard from './pages/dashboard/StudentDashboard';
 import CoursesPage from './pages/dashboard/CoursesPage';
 import ForumsPage from './pages/dashboard/ForumsPage';
 
 // Admin Pages
-import AdminUsersPage from './pages/dashboard/admin/UsersPage';
-import AdminDepartmentsPage from './pages/dashboard/admin/DepartmentsPage';
-import AdminCategoriesPage from './pages/dashboard/admin/CategoriesPage';
-import AdminTagsPage from './pages/dashboard/admin/TagsPage';
-import AdminCoursesPage from './pages/dashboard/admin/CoursesPage';
-import AdminCreateCoursePage from './pages/dashboard/admin/CreateCoursePage';
-import AdminEditCoursePage from './pages/dashboard/admin/EditCoursePage';
-import AdminLearningPathsPage from './pages/dashboard/admin/LearningPathsPage';
-import AdminSkillsPage from './pages/dashboard/admin/SkillsPage';
-import AdminBadgesAchievementsPage from './pages/dashboard/admin/BadgesAchievementsPage';
-import AdminReviewsPage from './pages/dashboard/admin/ReviewsPage';
-import AdminStudyGroupsPage from './pages/dashboard/admin/StudyGroupsPage';
-import AdminLeaderboardPage from './pages/dashboard/admin/LeaderboardPage';
-import AdminNotificationsPage from './pages/dashboard/admin/NotificationsPage';
-import AdminAnalyticsPage from './pages/dashboard/admin/AnalyticsPage';
-import AdminSettingsPage from './pages/dashboard/admin/SettingsPage';
+import AdminUsersPage from './pages/admin/UsersPage';
+import AdminDepartmentsPage from './pages/admin/DepartmentsPage';
+import AdminCategoriesPage from './pages/admin/CategoriesPage';
+import AdminTagsPage from './pages/admin/TagsPage';
+import AdminCoursesPage from './pages/admin/CoursesPage';
+import AdminCreateCoursePage from './pages/admin/CreateCoursePage';
+import AdminEditCoursePage from './pages/admin/EditCoursePage';
+import AdminLearningPathsPage from './pages/admin/LearningPathsPage';
+import AdminSkillsPage from './pages/admin/SkillsPage';
+import AdminBadgesAchievementsPage from './pages/admin/BadgesAchievementsPage';
+import AdminReviewsPage from './pages/admin/ReviewsPage';
+import AdminStudyGroupsPage from './pages/admin/StudyGroupsPage';
+import AdminLeaderboardPage from './pages/admin/LeaderboardPage';
+import AdminNotificationsPage from './pages/admin/NotificationsPage';
+import AdminAnalyticsPage from './pages/admin/AnalyticsPage';
+import AdminSettingsPage from './pages/admin/SettingsPage';
 
 // Protected Route Component
 function ProtectedRoute({ children, requiredRole }: { children: React.ReactNode; requiredRole?: string }) {
