@@ -88,7 +88,7 @@ export default function Sidebar() {
   };
 
   return (
-    <div className="h-full w-56 bg-background-card border-r border-secondary/30 flex flex-col">
+    <div className="h-screen w-56 bg-background-card border-r border-secondary/30 flex flex-col overflow-y-auto">
       <div className="px-4 border-b border-secondary/30 pb-3 pt-0.5">
         <div className="flex flex-col items-start text-left">
           <div className="w-28 h-28 -my-3.5 flex items-center justify-start transition-all duration-200">

@@ -45,15 +45,15 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex h-screen bg-background overflow-hidden">
       <Sidebar userRole={user?.role} />
-      <div className="flex-1 flex flex-col">
-        <Header 
-          userName={`${user?.first_name} ${user?.last_name}`} 
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <Header
+          userName={`${user?.first_name} ${user?.last_name}`}
           userRole={user?.role}
           userAvatar={user?.avatar_url}
         />
-        <main className="flex-1 p-6">{children}</main>
+        <main className="flex-1 overflow-y-auto p-6">{children}</main>
       </div>
     </div>
   );
