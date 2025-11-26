@@ -41,6 +41,7 @@ import videoRoutes from './routes/video';
 import analyticsRoutes from './routes/analytics';
 import departmentRoutes from './routes/departments';
 import userRoutes from './routes/users';
+import tagRoutes from './routes/tags';
 
 // Health check
 app.get('/health', (req, res) => {
@@ -60,6 +61,7 @@ app.use('/api/video', videoRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/departments', departmentRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/tags', tagRoutes);
 
 // Socket.io connection handling
 io.on('connection', (socket) => {
