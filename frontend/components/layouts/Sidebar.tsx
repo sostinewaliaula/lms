@@ -88,15 +88,15 @@ export default function Sidebar() {
   };
 
   return (
-    <div className="h-full w-64 bg-background-card border-r border-secondary/30 flex flex-col">
-      <div className="px-4 border-b border-secondary/30 pb-3">
-        <div className="flex flex-col items-center">
-          <div className="w-40 h-40 -my-4 flex items-center justify-center">
+    <div className="h-full w-56 bg-background-card border-r border-secondary/30 flex flex-col">
+      <div className="px-4 border-b border-secondary/30 pb-3 pt-0.5">
+        <div className="flex flex-col items-start text-left">
+          <div className="w-28 h-28 -my-3.5 flex items-center justify-start transition-all duration-200">
             {!logoError ? (
               <img 
                 src="/assets/logo.png" 
                 alt="Caava Group" 
-                className="w-40 h-40 object-contain"
+                className="w-28 h-28 object-contain"
                 onError={() => setLogoError(true)}
               />
             ) : (
@@ -108,13 +108,19 @@ export default function Sidebar() {
               </div>
             )}
           </div>
-          <p className="text-sm font-semibold text-text-primary text-center whitespace-nowrap tracking-wider knowledge-center-text -mt-3 mb-1">
-            Caava Knowledge Center
-          </p>
+          <div className="-mt-3 mb-1">
+            <p className="text-sm font-semibold whitespace-nowrap tracking-wider knowledge-center-text">
+              <span className="text-primary">Knowledge</span>{' '}
+              <span className="text-secondary">Center</span>
+            </p>
+            <p className="text-xs font-semibold text-secondary tracking-[0.15em]">
+              TQ Academy
+            </p>
+          </div>
         </div>
       </div>
 
-      <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+      <nav className="flex-1 px-3 py-3 space-y-1.5 overflow-y-auto">
         {menuItems.map((item) => {
           const Icon = item.icon;
           const isActive = pathname === item.href || pathname?.startsWith(item.href + '/');
@@ -123,20 +129,20 @@ export default function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+              className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-colors text-sm ${
                 isActive
                   ? 'bg-primary/10 text-primary border-l-4 border-primary'
                   : 'text-text-muted hover:bg-secondary/10 hover:text-text-primary'
               }`}
             >
-              <Icon size={20} />
+              <Icon size={18} />
               <span className="font-medium">{item.name}</span>
             </Link>
           );
         })}
       </nav>
 
-      <div className="p-4 border-t border-secondary/30 space-y-2">
+      <div className="px-3 py-3 border-t border-secondary/30 space-y-2">
         <div className="flex items-center justify-between">
           <span className="text-sm text-text-muted">Theme</span>
           <ThemeToggle />
