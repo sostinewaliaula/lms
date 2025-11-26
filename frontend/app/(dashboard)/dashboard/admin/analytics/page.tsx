@@ -2,6 +2,15 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { TrendingUp, Users, BookOpen, Award, Clock, Sparkles, Activity } from 'lucide-react';
+import {
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip as RechartsTooltip,
+} from 'recharts';
 import { getDashboardStats } from '@/lib/api/analytics';
 import toast from 'react-hot-toast';
 
@@ -53,6 +62,16 @@ export default function AdminAnalyticsPage() {
       : 0;
   const totalEvents = eventStats.reduce((sum: number, event: any) => sum + (event.count || 0), 0);
   const insights = eventStats.slice(0, 4);
+
+  const completionChartData = completionRates.slice(0, 8).map((course: any) => ({
+    name: course.title,
+    completion: Number(course.completion_rate || 0),
+  }));
+
+  const eventChartData = eventStats.map((event: any) => ({
+    name: event.event_type,
+    count: event.count || 0,
+  }));
 
   return (
     <div className="p-6 space-y-6">
@@ -136,6 +155,98 @@ export default function AdminAnalyticsPage() {
           </div>
         ))}
       </div>
+
+      {(completionChartData.length > 0 || eventChartData.length > 0) && (
+        <div className="grid gap-6 lg:grid-cols-2">
+          {completionChartData.length > 0 && (
+            <div className="bg-background-card rounded-3xl border border-secondary/30 p-6 shadow-lg shadow-primary/5">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <p className="text-xs uppercase text-text-muted">Visualization</p>
+                  <h2 className="text-lg font-semibold text-text-primary">Completion by course</h2>
+                </div>
+              </div>
+              <div className="h-72">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={completionChartData} margin={{ left: -20, right: 10 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(148, 163, 184, 0.25)" vertical={false} />
+                    <XAxis
+                      dataKey="name"
+                      tick={{ fontSize: 10, fill: 'rgb(148,163,184)' }}
+                      tickLine={false}
+                      axisLine={false}
+                      interval={0}
+                      angle={-30}
+                      textAnchor="end"
+                      height={70}
+                    />
+                    <YAxis tick={{ fontSize: 10, fill: 'rgb(148,163,184)' }} tickLine={false} axisLine={false} />
+                    <RechartsTooltip
+                      cursor={{ fill: 'rgba(148,163,184,0.12)' }}
+                      content={({ active, payload }: any) =>
+                        active && payload?.length ? (
+                          <div className="rounded-xl border border-secondary/30 bg-background px-3 py-2 text-xs shadow">
+                            <p className="font-semibold text-text-primary">{payload[0].payload.name}</p>
+                            <p className="text-text-muted">{payload[0].value.toFixed(1)}% complete</p>
+                          </div>
+                        ) : null
+                      }
+                    />
+                    <Bar dataKey="completion" radius={[6, 6, 0, 0]} fill="url(#completionGradient)" />
+                    <defs>
+                      <linearGradient id="completionGradient" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stopColor="#10b981" />
+                        <stop offset="100%" stopColor="#8b5cf6" />
+                      </linearGradient>
+                    </defs>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          )}
+
+          {eventChartData.length > 0 && (
+            <div className="bg-background-card rounded-3xl border border-secondary/30 p-6 shadow-lg shadow-primary/5">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <p className="text-xs uppercase text-text-muted">Events</p>
+                  <h2 className="text-lg font-semibold text-text-primary">Interactions by type</h2>
+                </div>
+              </div>
+              <div className="h-72">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={eventChartData} margin={{ left: -20, right: 10 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(148, 163, 184, 0.25)" vertical={false} />
+                    <XAxis
+                      dataKey="name"
+                      tick={{ fontSize: 10, fill: 'rgb(148,163,184)' }}
+                      tickLine={false}
+                      axisLine={false}
+                      interval={0}
+                      angle={-25}
+                      textAnchor="end"
+                      height={60}
+                    />
+                    <YAxis tick={{ fontSize: 10, fill: 'rgb(148,163,184)' }} tickLine={false} axisLine={false} />
+                    <RechartsTooltip
+                      cursor={{ fill: 'rgba(148,163,184,0.12)' }}
+                      content={({ active, payload }: any) =>
+                        active && payload?.length ? (
+                          <div className="rounded-xl border border-secondary/30 bg-background px-3 py-2 text-xs shadow">
+                            <p className="font-semibold text-text-primary">{payload[0].payload.name}</p>
+                            <p className="text-text-muted">{payload[0].value} events</p>
+                          </div>
+                        ) : null
+                      }
+                    />
+                    <Bar dataKey="count" radius={[6, 6, 0, 0]} fill="#8b5cf6" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {completionRates.length > 0 && (
         <div className="bg-background-card rounded-3xl border border-secondary/30 p-6 shadow-lg shadow-primary/5">
