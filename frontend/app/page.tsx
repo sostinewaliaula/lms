@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import {
   BookOpen,
@@ -31,7 +31,120 @@ import {
   Sparkles,
 } from 'lucide-react';
 import ThemeToggle from '@/components/ThemeToggle';
+
+// Counter animation component
+function AnimatedCounter({ end, duration = 2000 }: { end: string; duration?: number }) {
+  const [count, setCount] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !isVisible) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => observer.disconnect();
+  }, [isVisible]);
+
+  useEffect(() => {
+    if (!isVisible) return;
+
+    const numericValue = parseInt(end.replace(/\D/g, ''));
+    const suffix = end.replace(/\d/g, '');
+    const startTime = Date.now();
+
+    const updateCount = () => {
+      const now = Date.now();
+      const progress = Math.min((now - startTime) / duration, 1);
+      const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+      const current = Math.floor(easeOutQuart * numericValue);
+
+      setCount(current);
+
+      if (progress < 1) {
+        requestAnimationFrame(updateCount);
+      } else {
+        setCount(numericValue);
+      }
+    };
+
+    requestAnimationFrame(updateCount);
+  }, [isVisible, end, duration]);
+
+  const suffix = end.replace(/\d/g, '');
+
+  return (
+    <div ref={ref} className="text-center fade-in-on-scroll hover-lift p-6 rounded-lg bg-background/50">
+      <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
+        {count}{suffix}
+      </div>
+    </div>
+  );
+}
+
+// Scroll reveal component wrapper
+function ScrollReveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      className={`fade-in-on-scroll ${isVisible ? 'visible' : ''}`}
+      style={{ transitionDelay: `${delay}s` }}
+    >
+      {children}
+    </div>
+  );
+}
+
 export default function LandingPage() {
+  // Global scroll reveal observer
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const elements = document.querySelectorAll('.fade-in-on-scroll');
+    elements.forEach((el) => observer.observe(el));
+
+    return () => {
+      elements.forEach((el) => observer.unobserve(el));
+    };
+  }, []);
 
   const features = [
     {
@@ -113,34 +226,38 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 hero-gradient relative">
+      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 hero-gradient relative overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '1s' }}></div>
+        
         <div className="max-w-7xl mx-auto text-center relative z-10">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/20 border border-primary/30 rounded-full text-primary mb-6">
-            <Zap size={16} />
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/20 border border-primary/30 rounded-full text-primary mb-6 animate-fade-in-up">
+            <Zap size={16} className="animate-pulse" />
             <span className="text-sm font-medium">Empowering Your Learning Journey</span>
           </div>
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6">
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
             <span className="text-text-primary">Welcome to</span>
             <br />
-            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent animate-gradient">
               Caava Knowledge Center
             </span>
           </h1>
-          <p className="text-xl sm:text-2xl text-text-muted max-w-3xl mx-auto mb-10">
+          <p className="text-xl sm:text-2xl text-text-muted max-w-3xl mx-auto mb-10 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
             Your internal learning platform for professional development, skills enhancement, and continuous growth. 
             Access training programs and resources designed for Caava Group employees.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
             <Link
               href="/login"
-              className="px-8 py-4 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all transform hover:scale-105 font-semibold text-lg flex items-center gap-2"
+              className="px-8 py-4 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all transform hover:scale-105 font-semibold text-lg flex items-center gap-2 shadow-lg hover:shadow-primary/50"
             >
               Access Knowledge Center
-              <ArrowRight size={20} />
+              <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link
               href="/login"
-              className="px-8 py-4 bg-background-card border-2 border-primary text-primary rounded-lg hover:bg-primary/10 transition-all font-semibold text-lg flex items-center gap-2"
+              className="px-8 py-4 bg-background-card border-2 border-primary text-primary rounded-lg hover:bg-primary/10 transition-all font-semibold text-lg flex items-center gap-2 hover-lift"
             >
               <PlayCircle size={20} />
               Browse Courses
@@ -155,9 +272,7 @@ export default function LandingPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
-                  {stat.number}
-                </div>
+                <AnimatedCounter end={stat.number} />
                 <div className="text-text-muted">{stat.label}</div>
               </div>
             ))}
@@ -168,7 +283,7 @@ export default function LandingPage() {
       {/* Features Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-16 fade-in-on-scroll">
             <h2 className="text-4xl sm:text-5xl font-bold text-text-primary mb-4">
               Your <span className="text-primary">Learning Hub</span>
             </h2>
@@ -180,18 +295,17 @@ export default function LandingPage() {
             {features.map((feature, index) => {
               const Icon = feature.icon;
               return (
-                <div
-                  key={index}
-                  className="bg-background-card p-6 rounded-lg border border-secondary/30 hover:border-primary/50 transition-all hover:shadow-lg"
-                >
-                  <div className={`${feature.color} mb-4`}>
-                    <Icon size={40} />
+                <ScrollReveal key={index} delay={index * 0.1}>
+                  <div className="bg-background-card p-6 rounded-lg border border-secondary/30 hover:border-primary/50 transition-all hover-lift">
+                    <div className={`${feature.color} mb-4 transform transition-transform hover:scale-110`}>
+                      <Icon size={40} />
+                    </div>
+                    <h3 className="text-xl font-semibold text-text-primary mb-2">
+                      {feature.title}
+                    </h3>
+                    <p className="text-text-muted">{feature.description}</p>
                   </div>
-                  <h3 className="text-xl font-semibold text-text-primary mb-2">
-                    {feature.title}
-                  </h3>
-                  <p className="text-text-muted">{feature.description}</p>
-                </div>
+                </ScrollReveal>
               );
             })}
           </div>
@@ -201,51 +315,61 @@ export default function LandingPage() {
       {/* How It Works Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-background-card">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl sm:text-5xl font-bold text-text-primary mb-4">
-              How It <span className="text-primary">Works</span>
-            </h2>
-            <p className="text-xl text-text-muted max-w-2xl mx-auto">
-              Get started with your learning journey in just a few simple steps.
-            </p>
-          </div>
+          <ScrollReveal>
+            <div className="text-center mb-16">
+              <h2 className="text-4xl sm:text-5xl font-bold text-text-primary mb-4">
+                How It <span className="text-primary">Works</span>
+              </h2>
+              <p className="text-xl text-text-muted max-w-2xl mx-auto">
+                Get started with your learning journey in just a few simple steps.
+              </p>
+            </div>
+          </ScrollReveal>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-primary">1</span>
+            <ScrollReveal delay={0.1}>
+              <div className="text-center hover-lift">
+                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 transform transition-transform hover:scale-110">
+                  <span className="text-2xl font-bold text-primary">1</span>
+                </div>
+                <h3 className="text-xl font-semibold text-text-primary mb-2">Sign In</h3>
+                <p className="text-text-muted">
+                  Access the platform using your Caava Group employee credentials
+                </p>
               </div>
-              <h3 className="text-xl font-semibold text-text-primary mb-2">Sign In</h3>
-              <p className="text-text-muted">
-                Access the platform using your Caava Group employee credentials
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-secondary">2</span>
+            </ScrollReveal>
+            <ScrollReveal delay={0.2}>
+              <div className="text-center hover-lift">
+                <div className="w-16 h-16 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-4 transform transition-transform hover:scale-110">
+                  <span className="text-2xl font-bold text-secondary">2</span>
+                </div>
+                <h3 className="text-xl font-semibold text-text-primary mb-2">Browse Courses</h3>
+                <p className="text-text-muted">
+                  Explore courses by department, category, or search for specific topics
+                </p>
               </div>
-              <h3 className="text-xl font-semibold text-text-primary mb-2">Browse Courses</h3>
-              <p className="text-text-muted">
-                Explore courses by department, category, or search for specific topics
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-primary">3</span>
+            </ScrollReveal>
+            <ScrollReveal delay={0.3}>
+              <div className="text-center hover-lift">
+                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 transform transition-transform hover:scale-110">
+                  <span className="text-2xl font-bold text-primary">3</span>
+                </div>
+                <h3 className="text-xl font-semibold text-text-primary mb-2">Enroll & Learn</h3>
+                <p className="text-text-muted">
+                  Enroll in courses, complete modules, and track your progress
+                </p>
               </div>
-              <h3 className="text-xl font-semibold text-text-primary mb-2">Enroll & Learn</h3>
-              <p className="text-text-muted">
-                Enroll in courses, complete modules, and track your progress
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-secondary">4</span>
+            </ScrollReveal>
+            <ScrollReveal delay={0.4}>
+              <div className="text-center hover-lift">
+                <div className="w-16 h-16 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-4 transform transition-transform hover:scale-110">
+                  <span className="text-2xl font-bold text-secondary">4</span>
+                </div>
+                <h3 className="text-xl font-semibold text-text-primary mb-2">Get Certified</h3>
+                <p className="text-text-muted">
+                  Earn certificates upon completion and showcase your achievements
+                </p>
               </div>
-              <h3 className="text-xl font-semibold text-text-primary mb-2">Get Certified</h3>
-              <p className="text-text-muted">
-                Earn certificates upon completion and showcase your achievements
-              </p>
-            </div>
+            </ScrollReveal>
           </div>
         </div>
       </section>
@@ -253,16 +377,19 @@ export default function LandingPage() {
       {/* Testimonials Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl sm:text-5xl font-bold text-text-primary mb-4">
-              What Our <span className="text-primary">Learners Say</span>
-            </h2>
-            <p className="text-xl text-text-muted max-w-2xl mx-auto">
-              Hear from employees who have enhanced their skills through Caava Knowledge Center.
-            </p>
-          </div>
+          <ScrollReveal>
+            <div className="text-center mb-16">
+              <h2 className="text-4xl sm:text-5xl font-bold text-text-primary mb-4">
+                What Our <span className="text-primary">Learners Say</span>
+              </h2>
+              <p className="text-xl text-text-muted max-w-2xl mx-auto">
+                Hear from employees who have enhanced their skills through Caava Knowledge Center.
+              </p>
+            </div>
+          </ScrollReveal>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-background-card p-6 rounded-lg border border-secondary/30">
+            <ScrollReveal delay={0.1}>
+              <div className="bg-background-card p-6 rounded-lg border border-secondary/30 hover-lift">
               <div className="flex items-center gap-1 mb-4">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} size={16} className="text-yellow-400 fill-yellow-400" />
@@ -280,45 +407,50 @@ export default function LandingPage() {
                   <div className="text-sm text-text-muted">IT Department</div>
                 </div>
               </div>
-            </div>
-            <div className="bg-background-card p-6 rounded-lg border border-secondary/30">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={16} className="text-yellow-400 fill-yellow-400" />
-                ))}
               </div>
-              <p className="text-text-muted mb-4 italic">
-                "I love how easy it is to find relevant training for my department. The certificates I've earned have been great additions to my professional portfolio."
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-secondary/20 rounded-full flex items-center justify-center">
-                  <Users size={20} className="text-secondary" />
+            </ScrollReveal>
+            <ScrollReveal delay={0.2}>
+              <div className="bg-background-card p-6 rounded-lg border border-secondary/30 hover-lift">
+                <div className="flex items-center gap-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} size={16} className="text-yellow-400 fill-yellow-400" />
+                  ))}
                 </div>
-                <div>
-                  <div className="font-semibold text-text-primary">Michael Chen</div>
-                  <div className="text-sm text-text-muted">Engineering Department</div>
-                </div>
-              </div>
-            </div>
-            <div className="bg-background-card p-6 rounded-lg border border-secondary/30">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={16} className="text-yellow-400 fill-yellow-400" />
-                ))}
-              </div>
-              <p className="text-text-muted mb-4 italic">
-                "As a new employee, this platform helped me get up to speed quickly. The discussion forums are also great for connecting with colleagues."
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
-                  <Users size={20} className="text-primary" />
-                </div>
-                <div>
-                  <div className="font-semibold text-text-primary">Emily Rodriguez</div>
-                  <div className="text-sm text-text-muted">LMS Department</div>
+                <p className="text-text-muted mb-4 italic">
+                  "I love how easy it is to find relevant training for my department. The certificates I've earned have been great additions to my professional portfolio."
+                </p>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-secondary/20 rounded-full flex items-center justify-center">
+                    <Users size={20} className="text-secondary" />
+                  </div>
+                  <div>
+                    <div className="font-semibold text-text-primary">Michael Chen</div>
+                    <div className="text-sm text-text-muted">Engineering Department</div>
+                  </div>
                 </div>
               </div>
-            </div>
+            </ScrollReveal>
+            <ScrollReveal delay={0.3}>
+              <div className="bg-background-card p-6 rounded-lg border border-secondary/30 hover-lift">
+                <div className="flex items-center gap-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} size={16} className="text-yellow-400 fill-yellow-400" />
+                  ))}
+                </div>
+                <p className="text-text-muted mb-4 italic">
+                  "As a new employee, this platform helped me get up to speed quickly. The discussion forums are also great for connecting with colleagues."
+                </p>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
+                    <Users size={20} className="text-primary" />
+                  </div>
+                  <div>
+                    <div className="font-semibold text-text-primary">Emily Rodriguez</div>
+                    <div className="text-sm text-text-muted">LMS Department</div>
+                  </div>
+                </div>
+              </div>
+            </ScrollReveal>
           </div>
         </div>
       </section>
