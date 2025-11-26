@@ -17,6 +17,7 @@ import {
   Tag,
   Hash,
   Route,
+  Sparkles,
 } from 'lucide-react';
 import { authApi } from '@/lib/api/auth';
 import ThemeToggle from '@/components/ThemeToggle';
@@ -49,6 +50,7 @@ const getMenuItems = (userRole?: string) => {
       { name: 'Dashboard', href: '/dashboard/admin', icon: Home },
       { name: 'Manage Courses', href: '/dashboard/admin/courses', icon: BookOpen },
       { name: 'Learning Paths', href: '/dashboard/admin/learning-paths', icon: Route },
+       { name: 'Skills Matrix', href: '/dashboard/admin/skills', icon: Sparkles },
       { name: 'Users', href: '/dashboard/admin/users', icon: Users },
       { name: 'Departments', href: '/dashboard/admin/departments', icon: Building2 },
       { name: 'Categories', href: '/dashboard/admin/categories', icon: Tag },

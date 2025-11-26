@@ -43,6 +43,7 @@ import departmentRoutes from './routes/departments';
 import userRoutes from './routes/users';
 import tagRoutes from './routes/tags';
 import learningPathRoutes from './routes/learningPaths';
+import skillRoutes from './routes/skills';
 
 // Health check
 app.get('/health', (req, res) => {
@@ -64,6 +65,7 @@ app.use('/api/departments', departmentRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/tags', tagRoutes);
 app.use('/api/learning-paths', learningPathRoutes);
+app.use('/api/skills', skillRoutes);
 
 // Socket.io connection handling
 io.on('connection', (socket) => {
