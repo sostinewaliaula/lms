@@ -89,7 +89,7 @@ export default function LandingPage() {
               <img 
                 src="/assets/logo.png" 
                 alt="Caava Group Logo" 
-                className="h-10 w-10 object-contain"
+                className="h-20 w-20 object-contain"
               />
               <div>
                 <div className="text-lg font-bold">
@@ -636,7 +636,7 @@ export default function LandingPage() {
                 <img 
                   src="/assets/logo.png" 
                   alt="Caava Group Logo" 
-                  className="h-10 w-10 object-contain"
+                  className="h-20 w-20 object-contain"
                 />
                 <div>
                   <div className="font-bold">
