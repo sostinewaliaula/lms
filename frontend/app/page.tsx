@@ -18,6 +18,17 @@ import {
   Building2,
   Target,
   GraduationCap,
+  MessageSquare,
+  Clock,
+  FileText,
+  HelpCircle,
+  ChevronDown,
+  ChevronUp,
+  CheckCircle2,
+  Video,
+  Download,
+  Calendar,
+  Sparkles,
 } from 'lucide-react';
 import ThemeToggle from '@/components/ThemeToggle';
 export default function LandingPage() {
@@ -71,7 +82,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-background-card/90 backdrop-blur-md border-b border-secondary/30">
+      <nav className="fixed top-0 left-0 right-0 z-50 navbar-background border-b border-secondary/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
@@ -92,15 +103,9 @@ export default function LandingPage() {
               <ThemeToggle />
               <Link
                 href="/login"
-                className="px-4 py-2 text-text-primary hover:text-primary transition-colors"
-              >
-                Sign In
-              </Link>
-              <Link
-                href="/register"
                 className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-semibold"
               >
-                Get Started
+                Sign In
               </Link>
             </div>
           </div>
@@ -108,8 +113,8 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-primary/10 via-background to-secondary/10">
-        <div className="max-w-7xl mx-auto text-center">
+      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 hero-gradient relative">
+        <div className="max-w-7xl mx-auto text-center relative z-10">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/20 border border-primary/30 rounded-full text-primary mb-6">
             <Zap size={16} />
             <span className="text-sm font-medium">Empowering Your Learning Journey</span>
@@ -187,6 +192,171 @@ export default function LandingPage() {
                   </h3>
                   <p className="text-text-muted">{feature.description}</p>
                 </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-background-card">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl sm:text-5xl font-bold text-text-primary mb-4">
+              How It <span className="text-primary">Works</span>
+            </h2>
+            <p className="text-xl text-text-muted max-w-2xl mx-auto">
+              Get started with your learning journey in just a few simple steps.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-primary">1</span>
+              </div>
+              <h3 className="text-xl font-semibold text-text-primary mb-2">Sign In</h3>
+              <p className="text-text-muted">
+                Access the platform using your Caava Group employee credentials
+              </p>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-secondary">2</span>
+              </div>
+              <h3 className="text-xl font-semibold text-text-primary mb-2">Browse Courses</h3>
+              <p className="text-text-muted">
+                Explore courses by department, category, or search for specific topics
+              </p>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-primary">3</span>
+              </div>
+              <h3 className="text-xl font-semibold text-text-primary mb-2">Enroll & Learn</h3>
+              <p className="text-text-muted">
+                Enroll in courses, complete modules, and track your progress
+              </p>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-secondary">4</span>
+              </div>
+              <h3 className="text-xl font-semibold text-text-primary mb-2">Get Certified</h3>
+              <p className="text-text-muted">
+                Earn certificates upon completion and showcase your achievements
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl sm:text-5xl font-bold text-text-primary mb-4">
+              What Our <span className="text-primary">Learners Say</span>
+            </h2>
+            <p className="text-xl text-text-muted max-w-2xl mx-auto">
+              Hear from employees who have enhanced their skills through Caava Knowledge Center.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-background-card p-6 rounded-lg border border-secondary/30">
+              <div className="flex items-center gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} size={16} className="text-yellow-400 fill-yellow-400" />
+                ))}
+              </div>
+              <p className="text-text-muted mb-4 italic">
+                "The platform has been instrumental in helping me develop new skills for my role. The courses are well-structured and the progress tracking keeps me motivated."
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
+                  <Users size={20} className="text-primary" />
+                </div>
+                <div>
+                  <div className="font-semibold text-text-primary">Sarah Johnson</div>
+                  <div className="text-sm text-text-muted">IT Department</div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-background-card p-6 rounded-lg border border-secondary/30">
+              <div className="flex items-center gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} size={16} className="text-yellow-400 fill-yellow-400" />
+                ))}
+              </div>
+              <p className="text-text-muted mb-4 italic">
+                "I love how easy it is to find relevant training for my department. The certificates I've earned have been great additions to my professional portfolio."
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-secondary/20 rounded-full flex items-center justify-center">
+                  <Users size={20} className="text-secondary" />
+                </div>
+                <div>
+                  <div className="font-semibold text-text-primary">Michael Chen</div>
+                  <div className="text-sm text-text-muted">Engineering Department</div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-background-card p-6 rounded-lg border border-secondary/30">
+              <div className="flex items-center gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} size={16} className="text-yellow-400 fill-yellow-400" />
+                ))}
+              </div>
+              <p className="text-text-muted mb-4 italic">
+                "As a new employee, this platform helped me get up to speed quickly. The discussion forums are also great for connecting with colleagues."
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
+                  <Users size={20} className="text-primary" />
+                </div>
+                <div>
+                  <div className="font-semibold text-text-primary">Emily Rodriguez</div>
+                  <div className="text-sm text-text-muted">LMS Department</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Course Categories Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-background-card">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl sm:text-5xl font-bold text-text-primary mb-4">
+              Explore by <span className="text-primary">Category</span>
+            </h2>
+            <p className="text-xl text-text-muted max-w-2xl mx-auto">
+              Find training courses organized by topic and skill area.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+            {[
+              { name: 'IT & Technology', icon: Globe, color: 'text-primary' },
+              { name: 'Leadership', icon: Target, color: 'text-secondary' },
+              { name: 'Communication', icon: MessageSquare, color: 'text-primary' },
+              { name: 'Project Management', icon: BarChart3, color: 'text-secondary' },
+              { name: 'Compliance', icon: Shield, color: 'text-primary' },
+              { name: 'Soft Skills', icon: Users, color: 'text-secondary' },
+            ].map((category, index) => {
+              const Icon = category.icon;
+              return (
+                <Link
+                  key={index}
+                  href="/login"
+                  className="bg-background p-6 rounded-lg border border-secondary/30 hover:border-primary transition-all hover:shadow-lg text-center group"
+                >
+                  <div className={`${category.color} mb-3 flex justify-center`}>
+                    <Icon size={32} />
+                  </div>
+                  <h3 className="text-sm font-semibold text-text-primary group-hover:text-primary transition-colors">
+                    {category.name}
+                  </h3>
+                </Link>
               );
             })}
           </div>
@@ -322,6 +492,120 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* FAQ Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl sm:text-5xl font-bold text-text-primary mb-4">
+              Frequently Asked <span className="text-primary">Questions</span>
+            </h2>
+            <p className="text-xl text-text-muted">
+              Common questions about using Caava Knowledge Center.
+            </p>
+          </div>
+          <div className="space-y-4">
+            {[
+              {
+                question: 'How do I access the Knowledge Center?',
+                answer: 'Simply sign in with your Caava Group employee credentials. New employees will have their accounts created by administrators.',
+              },
+              {
+                question: 'Are all courses free for employees?',
+                answer: 'Yes, all courses in Caava Knowledge Center are completely free for all Caava Group employees. There are no charges or fees.',
+              },
+              {
+                question: 'Can I access courses from any device?',
+                answer: 'Yes, the platform is fully responsive and can be accessed from desktop computers, tablets, and mobile devices.',
+              },
+              {
+                question: 'How do I get a certificate after completing a course?',
+                answer: 'Certificates are automatically generated when you complete a course. You can view and download them from your Certificates section.',
+              },
+              {
+                question: 'Can I track my learning progress?',
+                answer: 'Yes, you can view detailed analytics about your learning progress, completed courses, time spent, and achievements in your dashboard.',
+              },
+              {
+                question: 'Who can I contact for support?',
+                answer: 'For technical support or questions about courses, please contact your department manager or the Knowledge Center support team.',
+              },
+            ].map((faq, index) => (
+              <div
+                key={index}
+                className="bg-background-card border border-secondary/30 rounded-lg overflow-hidden"
+              >
+                <div className="p-6">
+                  <h3 className="text-lg font-semibold text-text-primary mb-2 flex items-center gap-2">
+                    <HelpCircle size={20} className="text-primary" />
+                    {faq.question}
+                  </h3>
+                  <p className="text-text-muted pl-8">{faq.answer}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Learning Resources Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-background-card">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl sm:text-5xl font-bold text-text-primary mb-4">
+              Additional <span className="text-primary">Resources</span>
+            </h2>
+            <p className="text-xl text-text-muted max-w-2xl mx-auto">
+              Access supplementary learning materials and tools to enhance your training experience.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                icon: Video,
+                title: 'Video Library',
+                description: 'Access recorded training sessions and video tutorials',
+                color: 'text-primary',
+              },
+              {
+                icon: FileText,
+                title: 'Documentation',
+                description: 'Download guides, manuals, and reference materials',
+                color: 'text-secondary',
+              },
+              {
+                icon: MessageSquare,
+                title: 'Discussion Forums',
+                description: 'Engage with colleagues and instructors in course discussions',
+                color: 'text-primary',
+              },
+              {
+                icon: Calendar,
+                title: 'Training Calendar',
+                description: 'View upcoming live sessions and training events',
+                color: 'text-secondary',
+              },
+            ].map((resource, index) => {
+              const Icon = resource.icon;
+              return (
+                <Link
+                  key={index}
+                  href="/login"
+                  className="bg-background p-6 rounded-lg border border-secondary/30 hover:border-primary transition-all hover:shadow-lg group"
+                >
+                  <div className={`${resource.color} mb-4`}>
+                    <Icon size={32} />
+                  </div>
+                  <h3 className="text-lg font-semibold text-text-primary mb-2 group-hover:text-primary transition-colors">
+                    {resource.title}
+                  </h3>
+                  <p className="text-sm text-text-muted">{resource.description}</p>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-primary/20 via-secondary/20 to-primary/20">
         <div className="max-w-4xl mx-auto text-center">
@@ -338,12 +622,6 @@ export default function LandingPage() {
             >
               Sign In to Knowledge Center
               <ArrowRight size={20} />
-            </Link>
-            <Link
-              href="/register"
-              className="px-8 py-4 bg-background-card border-2 border-primary text-primary rounded-lg hover:bg-primary/10 transition-all font-semibold text-lg"
-            >
-              New Employee? Register
             </Link>
           </div>
         </div>
@@ -418,11 +696,6 @@ export default function LandingPage() {
                 <li>
                   <Link href="/login" className="hover:text-primary transition-colors">
                     Employee Sign In
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/register" className="hover:text-primary transition-colors">
-                    New Employee Registration
                   </Link>
                 </li>
               </ul>

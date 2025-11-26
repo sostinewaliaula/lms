@@ -109,3 +109,46 @@ a {
 .border-secondary {
   border-color: var(--secondary);
 }
+
+/* Navbar with backdrop blur and semi-transparent background */
+.navbar-background {
+  background-color: var(--background-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* For browsers that support backdrop-filter, make background slightly transparent */
+@supports (backdrop-filter: blur(12px)) {
+  .navbar-background {
+    background-color: var(--background-card);
+  }
+}
+
+/* Hero section gradient background - theme aware */
+.hero-gradient {
+  background-color: var(--background);
+  position: relative;
+}
+
+.hero-gradient::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(16, 185, 129, 0.08),
+    transparent,
+    rgba(139, 92, 246, 0.08)
+  );
+  pointer-events: none;
+}
+
+.dark .hero-gradient::before {
+  background: linear-gradient(135deg, 
+    rgba(16, 185, 129, 0.12),
+    transparent,
+    rgba(139, 92, 246, 0.12)
+  );
+}

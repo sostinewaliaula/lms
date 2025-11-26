@@ -103,11 +103,8 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <p className="mt-6 text-center text-text-muted">
-            Don't have an account?{' '}
-            <Link href="/register" className="text-primary hover:underline">
-              Sign up
-            </Link>
+          <p className="mt-6 text-center text-text-muted text-sm">
+            Need an account? Contact your department manager or HR to have your account created by an administrator.
           </p>
         </div>
       </div>
