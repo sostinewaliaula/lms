@@ -46,6 +46,7 @@ import learningPathRoutes from './routes/learningPaths';
 import skillRoutes from './routes/skills';
 import badgeRoutes from './routes/badges';
 import achievementRoutes from './routes/achievements';
+import reviewRoutes from './routes/reviews';
 
 // Health check
 app.get('/health', (req, res) => {
@@ -70,6 +71,7 @@ app.use('/api/learning-paths', learningPathRoutes);
 app.use('/api/skills', skillRoutes);
 app.use('/api/badges', badgeRoutes);
 app.use('/api/achievements', achievementRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 // Socket.io connection handling
 io.on('connection', (socket) => {

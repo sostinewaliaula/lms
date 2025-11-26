@@ -19,6 +19,7 @@ import {
   Route,
   Sparkles,
   Trophy,
+  Star,
 } from 'lucide-react';
 import { authApi } from '@/lib/api/auth';
 import ThemeToggle from '@/components/ThemeToggle';
@@ -57,6 +58,7 @@ const getMenuItems = (userRole?: string) => {
       { name: 'Categories', href: '/dashboard/admin/categories', icon: Tag },
       { name: 'Tags', href: '/dashboard/admin/tags', icon: Hash },
       { name: 'Badges & Achievements', href: '/dashboard/admin/badges-achievements', icon: Trophy },
+      { name: 'Reviews', href: '/dashboard/admin/reviews', icon: Star },
       { name: 'Analytics', href: '/dashboard/admin/analytics', icon: BarChart3 },
       { name: 'Forums', href: '/dashboard/forums', icon: MessageSquare },
       { name: 'Settings', href: '/dashboard/admin/settings', icon: Settings },
