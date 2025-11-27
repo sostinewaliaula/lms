@@ -10,6 +10,7 @@ import {
   deleteContent,
   createQuiz,
   addQuizQuestion,
+  updateQuiz,
   submitQuiz,
 } from '../controllers/contentController';
 import { authenticate, authorize } from '../middleware/auth';
@@ -32,6 +33,7 @@ router.delete('/items/:id', authenticate, authorize('instructor', 'admin'), dele
 // Quiz routes
 router.post('/quizzes', authenticate, authorize('instructor', 'admin'), createQuiz);
 router.post('/quizzes/:quiz_id/questions', authenticate, authorize('instructor', 'admin'), addQuizQuestion);
+router.put('/quizzes/:quiz_id', authenticate, authorize('instructor', 'admin'), updateQuiz);
 router.post('/quizzes/:quiz_id/submit', authenticate, submitQuiz);
 
 export default router;

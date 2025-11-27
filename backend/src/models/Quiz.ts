@@ -65,6 +65,53 @@ export class QuizModel {
     return getFirstRow(result);
   }
 
+  static async update(id: string, data: {
+    title?: string;
+    description?: string;
+    time_limit_minutes?: number | null;
+    passing_score?: number;
+    max_attempts?: number;
+  }): Promise<Quiz | null> {
+    const fields: string[] = [];
+    const values: any[] = [];
+
+    if (data.title !== undefined) {
+      fields.push('title = ?');
+      values.push(data.title);
+    }
+
+    if (data.description !== undefined) {
+      fields.push('description = ?');
+      values.push(data.description);
+    }
+
+    if (data.time_limit_minutes !== undefined) {
+      fields.push('time_limit_minutes = ?');
+      values.push(data.time_limit_minutes ?? null);
+    }
+
+    if (data.passing_score !== undefined) {
+      fields.push('passing_score = ?');
+      values.push(data.passing_score);
+    }
+
+    if (data.max_attempts !== undefined) {
+      fields.push('max_attempts = ?');
+      values.push(data.max_attempts);
+    }
+
+    if (fields.length === 0) {
+      return this.findById(id);
+    }
+
+    values.push(id);
+    await pool.query(
+      `UPDATE quizzes SET ${fields.join(', ')}, created_at = created_at WHERE id = ?`,
+      values
+    );
+    return this.findById(id);
+  }
+
   static async addQuestion(data: {
     quiz_id: string;
     question_text: string;

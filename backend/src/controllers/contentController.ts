@@ -183,6 +183,21 @@ export const addQuizQuestion = async (req: Request, res: Response): Promise<void
   }
 };
 
+export const updateQuiz = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { quiz_id } = req.params;
+    const quiz = await QuizModel.update(quiz_id, req.body);
+    if (!quiz) {
+      res.status(404).json({ error: 'Quiz not found' });
+      return;
+    }
+    res.json({ message: 'Quiz updated successfully', quiz });
+  } catch (error) {
+    console.error('Update quiz error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 export const submitQuiz = async (req: Request, res: Response): Promise<void> => {
   try {
     const { quiz_id } = req.params;
